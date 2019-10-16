@@ -12,7 +12,7 @@ project(AMR
 set(SRC_DIR "src")
 set(INC_DIR "include")
 set(SOURCES ${SRC_DIR}/amr.c ${SRC_DIR}/common.c)
-set(HEADERS ${INC_DIR}/common.h)
+set(HEADERS ${INC_DIR}/amr.h ${INC_DIR}/common.h)
 add_executable(amr ${SOURCES} ${HEADERS})
 
 set(C_FLAGS "-O3")
