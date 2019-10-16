@@ -16,7 +16,7 @@ int main(int argc, char** argv) {
      * Parse command-line arguments
      */
     if (argc != 3) {
-        printf(usage);
+        printf("%s", usage);
         exit(1);
     }
     float affect_rate = strtof(argv[1], NULL);

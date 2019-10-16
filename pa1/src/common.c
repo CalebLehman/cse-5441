@@ -3,11 +3,13 @@
 
 #include "common.h"
 
+const char* invalid_format = "Error: invalid input\n";
+
 /**
  * Struct to store minimially-processed input
  * for box data
  */
-const Count NUM_DIR = 4;
+#define NUM_DIR 4
 typedef enum { TOP=0, BOTTOM, LEFT, RIGHT } DIRECTION;
 typedef struct BoxInput {
     Coord x_min, x_max, y_min, y_max;
@@ -35,9 +37,18 @@ AMRInput* parseInput() {
     /**
      * Read in general parameters
      */
-    scanf(COUNT_SPEC, &input->N);
-    scanf(COORD_SPEC, &input->rows);
-    scanf(COORD_SPEC, &input->cols);
+    if (scanf(COUNT_SPEC, &input->N) != 1) {
+        fprintf(stderr, "%s", invalid_format);
+        exit(1);
+    }
+    if (scanf(COORD_SPEC, &input->rows) != 1) {
+        fprintf(stderr, "%s", invalid_format);
+        exit(1);
+    }
+    if (scanf(COORD_SPEC, &input->cols) != 1) {
+        fprintf(stderr, "%s", invalid_format);
+        exit(1);
+    }
 
     /**
      * Allocate arrays for per-box values
@@ -55,10 +66,13 @@ AMRInput* parseInput() {
          * Verify that ids are sequential
          */
         Count id;
-        scanf(COUNT_SPEC, &id);
+        if (scanf(COUNT_SPEC, &id) != 1) {
+            fprintf(stderr, "%s", invalid_format);
+            exit(1);
+        }
         #ifdef DEBUG
         if (id != i) {
-            printf("Bad test file, boxes should occur in order of id\n");
+            fprintf(stderr, "%s", invalid_format);
             exit(1);
         }
         #endif
@@ -67,8 +81,12 @@ AMRInput* parseInput() {
          * Size and position information
          */
         Coord y, x, height, width;
-        scanf(COORD_SPEC COORD_SPEC COORD_SPEC COORD_SPEC,
-              &y,        &x,        &height,   &width);
+        if (scanf(COORD_SPEC COORD_SPEC COORD_SPEC COORD_SPEC,
+                  &y,        &x,        &height,   &width)
+            != 4) {
+            fprintf(stderr, "%s", invalid_format);
+            exit(1);
+        }
         box_input->x_min     = x;
         box_input->x_max     = x + width;
         box_input->y_min     = y;
@@ -80,20 +98,29 @@ AMRInput* parseInput() {
          */
         for (DIRECTION dir = TOP; dir <= RIGHT; ++dir) {
             Count num_nhbrs;
-            scanf(COUNT_SPEC, &num_nhbrs);
+            if (scanf(COUNT_SPEC, &num_nhbrs) != 1) {
+                fprintf(stderr, "%s", invalid_format);
+                exit(1);
+            }
             box_input->num_nhbrs[dir] = num_nhbrs;
             box_input->nhbr_ids[dir]  = malloc(
                 num_nhbrs * sizeof(*box_input->nhbr_ids[dir])
             );
             for (int nhbr = 0; nhbr < num_nhbrs; ++nhbr) {
-                scanf(COUNT_SPEC, &box_input->nhbr_ids[dir][nhbr]);
+                if (scanf(COUNT_SPEC, &box_input->nhbr_ids[dir][nhbr]) != 1) {
+                    fprintf(stderr, "%s", invalid_format);
+                    exit(1);
+                }
             }
         }
 
         /**
          * DSV information
          */
-        scanf(DSV_SPEC, &input->vals[i]);
+        if (scanf(DSV_SPEC, &input->vals[i]) != 1) {
+            fprintf(stderr, "%s", invalid_format);
+            exit(1);
+        }
     }
 
     /**
