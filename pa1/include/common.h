@@ -1,5 +1,7 @@
 #pragma once
 
+#include <time.h>
+
 typedef unsigned int Count;
 typedef unsigned int Coord;
 typedef double       DSV;
@@ -55,6 +57,10 @@ typedef struct AMROutput {
     unsigned long iterations;
     DSV           max;
     DSV           min;
+
+    double time_seconds;
+    double clock_seconds;
+    double gettime_seconds;
 } AMROutput;
 
 /**
