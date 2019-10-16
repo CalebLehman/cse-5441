@@ -45,7 +45,7 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
     AMRMaxMin max_min = getMaxMin(input);
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
     unsigned long iter;
-    for (iter = 0; max_min.max > max_min.min + epsilon; ++iter, max_min = getMaxMin(input)) {
+    for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
         #ifdef DEBUG
         printf("BEGIN ITERATION %lu\n", iter + 1);
         printf("original:\n");
