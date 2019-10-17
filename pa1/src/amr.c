@@ -47,14 +47,14 @@ int main(int argc, char** argv) {
     output.time_seconds  = difftime(time_after, time_before);
     output.clock_seconds = (clock_after - clock_before) / (double) CLOCKS_PER_SEC;
     output.gettime_seconds = (double) (
-        ((gettime_after.tv_sec - gettime_before.tv_sec) * CLOCKS_PER_SEC) +
+        (gettime_after.tv_sec - gettime_before.tv_sec) +
         ((gettime_after.tv_nsec - gettime_before.tv_nsec) / 1000000000)
     );
 
-    printf("%lu\n", output.iterations);
-    printf("%lf\n", output.time_seconds);
-    printf("%lf\n", output.clock_seconds);
-    printf("%lf\n", output.gettime_seconds);
+    /**
+     * Display results
+     */
+    displayOutput(output);
     return 0;
 }
 

@@ -46,23 +46,6 @@ typedef struct AMRInput {
     DSV*     vals;
 } AMRInput;
 
-typedef struct AMROutput {
-    /**
-     * General parameters controlling
-     * execution of Adaptive Mesh Refinement.
-     */
-    float affect_rate;
-    float epsilon;
-
-    unsigned long iterations;
-    DSV           max;
-    DSV           min;
-
-    double time_seconds;
-    double clock_seconds;
-    double gettime_seconds;
-} AMROutput;
-
 /**
  * Parses Adaptive Mesh Refinement input from stdin.
  * Allocates and populates an {@code AMRInput} struct to hold the input.
@@ -80,20 +63,6 @@ AMRInput* parseInput();
  * @param input pointer to {@code AMRInput} returned by {@code parseInput()}
  */
 void destroyInput(AMRInput* input);
-
-/***********************************************
- * Misc. helper functions
- ***********************************************/
-
-/**
- * Helper function for computing the minimum of ints
- */
-static inline int min(int a, int b) { return a < b ? a : b; }
-
-/**
- * Helper function for computing the maximum of ints
- */
-static inline int max(int a, int b) { return a > b ? a : b; }
 
 typedef struct AMRMaxMin {
     DSV max;
@@ -117,6 +86,44 @@ static inline AMRMaxMin getMaxMin(AMRInput* input) {
     }
     return result;
 }
+
+typedef struct AMROutput {
+    /**
+     * General parameters controlling
+     * execution of Adaptive Mesh Refinement.
+     */
+    float affect_rate;
+    float epsilon;
+
+    unsigned long iterations;
+    DSV           max;
+    DSV           min;
+
+    double time_seconds;
+    double clock_seconds;
+    double gettime_seconds;
+} AMROutput;
+
+/**
+ * Display results corresponding to given {@code AMROutput}.
+ * @param output {@code AMROutput} struct with results of run
+ */
+void displayOutput(AMROutput output);
+
+
+/***********************************************
+ * Misc. helper functions
+ ***********************************************/
+
+/**
+ * Helper function for computing the minimum of ints
+ */
+static inline int min(int a, int b) { return a < b ? a : b; }
+
+/**
+ * Helper function for computing the maximum of ints
+ */
+static inline int max(int a, int b) { return a > b ? a : b; }
 
 static void printDSVs(Count N, DSV* vals) {
     for (int i = 0; i < N; ++i) {
