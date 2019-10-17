@@ -228,15 +228,15 @@ void destroyInput(AMRInput* input) {
 void displayOutput(AMROutput output) {
     printf("========================================\n");
     printf("params:\n");
-    printf("\taffect_rate %f\n", output.affect_rate);
-    printf("\tepislon     %f\n", output.epsilon);
+    printf("=> affect_rate %f\n", output.affect_rate);
+    printf("=> epislon     %f\n", output.epsilon);
     printf("\nresults:\n");
-    printf("\titerations %lu\n", output.iterations);
-    printf("\tmax DSV    "DSV_SPEC"\n", output.max);
-    printf("\tmin DSV    "DSV_SPEC"\n", output.min);
+    printf("=> iterations %lu\n", output.iterations);
+    printf("=> max-DSV    "DSV_SPEC"\n", output.max);
+    printf("=> min-DSV    "DSV_SPEC"\n", output.min);
     printf("\ntiming:\n");
-    printf("\tseconds (time)    %lf\n", output.time_seconds);
-    printf("\tseconds (clock)   %lf\n", output.clock_seconds);
-    printf("\tseconds (gettime) %lf\n", output.gettime_seconds);
+    printf("=> time-seconds    %lf\n", output.time_seconds);
+    printf("=> clock-seconds   %lf\n", output.clock_seconds);
+    printf("=> gettime-seconds %lf\n", output.gettime_seconds);
     printf("========================================\n\n");
 }
