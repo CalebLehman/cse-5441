@@ -229,7 +229,7 @@ void displayOutput(AMROutput output) {
     printf("========================================\n");
     printf("params:\n");
     printf("=> affect_rate %f\n", output.affect_rate);
-    printf("=> epislon     %f\n", output.epsilon);
+    printf("=> epsilon     %f\n", output.epsilon);
     printf("\nresults:\n");
     printf("=> iterations %lu\n", output.iterations);
     printf("=> max-DSV    "DSV_SPEC"\n", output.max);

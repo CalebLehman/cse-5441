@@ -19,7 +19,7 @@ make
 mv amr ../. && cd ..
 
 # run tests
-vals=$(python -c "import numpy; print(' '.join(map(str, numpy.linspace(0.1, 0.0, 11))))")
+vals=$(python -c "import numpy; print(' '.join(map(str, numpy.linspace(0.10, 0.01, 10))))")
 for affect_rate in $vals; do
   for epsilon in $vals; do
     time ./amr ${affect_rate} ${epsilon} <tests/testgrid_400_12206
