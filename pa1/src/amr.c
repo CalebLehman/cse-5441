@@ -48,7 +48,7 @@ int main(int argc, char** argv) {
     output.clock_seconds = (clock_after - clock_before) / (double) CLOCKS_PER_SEC;
     output.gettime_seconds = (double) (
         (gettime_after.tv_sec - gettime_before.tv_sec) +
-        ((gettime_after.tv_nsec - gettime_before.tv_nsec) / 1000000000)
+        ((gettime_after.tv_nsec - gettime_before.tv_nsec) / 1000000000.0)
     );
 
     /**
@@ -69,7 +69,7 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
     unsigned long iter;
     for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
-        #if VERBOSE==1
+        #if (PRINT_DSVS != 0)
         printf("BEGIN ITERATION %lu\n", iter + 1);
         printDSVs(input->N, input->vals);
         #endif

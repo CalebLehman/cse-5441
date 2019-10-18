@@ -9,6 +9,7 @@ project(AMR
     DESCRIPTION "A serial C program for simple Adaptive Mesh Refinement (AMR)"
     LANGUAGES C)
 
+option(PRINT_DSVS "dump DSVs before each iteration" OFF)
 set(SRC_DIR "src")
 set(INC_DIR "include")
 set(SOURCES ${SRC_DIR}/amr.c ${SRC_DIR}/common.c)
@@ -16,6 +17,9 @@ set(HEADERS ${INC_DIR}/amr.h ${INC_DIR}/common.h)
 add_executable(amr ${SOURCES} ${HEADERS})
 
 set(C_FLAGS "-O3" "-Wall" "-Wextra" "-Wshadow" "-pedantic")
+if(PRINT_DSVS)
+    list(APPEND C_FLAGS "-DPRINT_DSVS=1")
+endif()
 set(DEBUG_FLAGS "-DDEBUG" "-g" "-pg")
 target_compile_options(amr PRIVATE ${C_FLAGS})
 target_compile_options(amr PRIVATE "$<$<CONFIG:DEBUG>:${DEBUG_FLAGS}>")

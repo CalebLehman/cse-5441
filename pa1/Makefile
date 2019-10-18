@@ -6,13 +6,20 @@ BUILD_DIR   = ./build
 INCLUDE_DIR = ./include
 
 C_COMPILER  = icc
-VERBOSE    ?= 0
-C_FLAGS     = -O3 -DVERBOSE=${VERBOSE} -Wall -Wextra -Wshadow -pedantic
+PRINT_DSVS ?= 0
+C_FLAGS     = -O3 \
+              -DPRINT_DSVS=${PRINT_DSVS} \
+			  -Wall \
+			  -Wextra \
+			  -Wshadow \
+			  -pedantic
 DEBUG_FLAGS = -DDEBUG -g
 LD_FLAGS    = -lrt
 
-OBJECTS = $(BUILD_DIR)/amr.o $(BUILD_DIR)/common.o
-HEADERS = $(INCLUDE_DIR)/amr.h $(INCLUDE_DIR)/common.h
+OBJECTS = $(BUILD_DIR)/amr.o \
+          $(BUILD_DIR)/common.o
+HEADERS = $(INCLUDE_DIR)/amr.h \
+          $(INCLUDE_DIR)/common.h
 TARGET  = amr
 
 
