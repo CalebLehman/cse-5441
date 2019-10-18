@@ -66,15 +66,17 @@ AMRInput* parseInput() {
          * Verify that ids are sequential
          */
         Count id;
+        #ifdef DEBUG
         if (scanf(COUNT_SPEC, &id) != 1) {
             fprintf(stderr, "%s", invalid_format);
             exit(1);
         }
-        #ifdef DEBUG
         if (id != i) {
             fprintf(stderr, "%s", invalid_format);
             exit(1);
         }
+        #else
+        int rv = scanf(COUNT_SPEC, &id);
         #endif
 
         /**

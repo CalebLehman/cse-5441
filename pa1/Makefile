@@ -6,9 +6,10 @@ BUILD_DIR   = ./build
 INCLUDE_DIR = ./include
 
 C_COMPILER  = icc
-C_FLAGS     = -O3
-DEBUG_FLAGS = -DDEBUG -Wall -Wextra -Wshadow -Wnon-virtual-dtor -pedantic
-LD_FLAGS    = 
+VERBOSE    ?= 0
+C_FLAGS     = -O3 -DVERBOSE=${VERBOSE} -Wall -Wextra -Wshadow -pedantic
+DEBUG_FLAGS = -DDEBUG -g
+LD_FLAGS    = -lrt
 
 OBJECTS = $(BUILD_DIR)/amr.o $(BUILD_DIR)/common.o
 HEADERS = $(INCLUDE_DIR)/amr.h $(INCLUDE_DIR)/common.h

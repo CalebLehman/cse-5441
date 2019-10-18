@@ -69,9 +69,8 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
     unsigned long iter;
     for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
-        #ifdef DEBUG
+        #if VERBOSE==1
         printf("BEGIN ITERATION %lu\n", iter + 1);
-        printf("original:\n");
         printDSVs(input->N, input->vals);
         #endif
         /**
@@ -90,10 +89,6 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
             updated_vals[i] = input->vals[i] * (1 - affect_rate)
                 + updated_vals[i] * affect_rate;
         }
-        #ifdef DEBUG
-        printf("updated:\n");
-        printDSVs(input->N, updated_vals);
-        #endif
 
         /**
          * Commit updated DSVs
