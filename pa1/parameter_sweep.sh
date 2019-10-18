@@ -3,8 +3,39 @@
 #PBS -l nodes=1:ppn=40
 #PBS -j oe
 #PBS -A PZS0711
+#PBS -q debug
 
-# load modules
+run_tests() {
+  local test_file="$1"
+
+  echo "Running tests with file ${test_file}..."
+
+  # Make directory to store temporary results
+  results_dir=${test_file}_results
+  mkdir ${results_dir}
+
+  # Run tests
+  vals=$(python -c "\
+import numpy as np; \
+vals = np.linspace(0.10, 0.09, 2); \
+print(' '.join(map(lambda x: str(round(x, 2)), vals)))"\
+  )
+  for affect_rate in ${vals}; do
+    for epsilon in ${vals}; do
+      results_file=${results_dir}/${affect_rate}_${epsilon}
+      time ./amr ${affect_rate} ${epsilon} <${test_file} 2>&1 | tee -a ${results_file} &
+    done
+  done
+  wait $(jobs -rp)
+
+  # Aggregate results
+  results_file=$(basename ${test_file})_results.txt
+  cat ${results_dir}/* >${results_file}
+
+  echo "Finished tests with file ${test_file}"
+}
+
+# Load modules
 module load intel
 module load python
 module load cmake
@@ -18,12 +49,20 @@ CC=icc cmake ..
 make
 mv amr ../. && cd ..
 
-# run tests
-vals=$(python -c "import numpy; print(' '.join(map(str, numpy.linspace(0.10, 0.01, 10))))")
-for affect_rate in $vals; do
-  for epsilon in $vals; do
-    time ./amr ${affect_rate} ${epsilon} <tests/testgrid_400_12206
-  done
+# Run tests
+mkdir -p ${PBS_O_WORKDIR}/results
+
+source tests.cfg
+for test_file in ${test_files[@]}; do
+  run_tests ${test_file}
 done
 
-# Post-process
+# Process results
+for test_file in ${test_files[@]}; do
+  results_file=$(basename ${test_file})_results.txt
+  plt_out_file=$(basename ${test_file})_results.png
+  python process_parameter_sweep.py ${results_file} ${plt_out_file}
+  mv ${results_file} ${PBS_O_WORKDIR}/results/.
+  mv ${plt_out_file} ${PBS_O_WORKDIR}/results/.
+done
+wait $(jobs -rp)
