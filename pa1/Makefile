@@ -20,19 +20,26 @@ OBJECTS = $(BUILD_DIR)/amr.o \
           $(BUILD_DIR)/common.o
 HEADERS = $(INCLUDE_DIR)/amr.h \
           $(INCLUDE_DIR)/common.h
-TARGET  = amr
+TARGETS = amr
 
 
-all: $(TARGET)
+all: $(TARGETS)
 
 debug: C_FLAGS += $(DEBUG_FLAGS)
-debug: $(TARGET)
+debug: $(TARGETS) report
 
 make_build:
 	mkdir -p $(BUILD_DIR)
 
-$(TARGET): make_build $(OBJECTS) $(HEADERS)
-	$(C_COMPILER) $(C_FLAGS) -o $(TARGET) $(OBJECTS) $(LD_FLAGS)
+amr: make_build $(OBJECTS) $(HEADERS)
+	$(C_COMPILER) $(C_FLAGS) -o amr $(OBJECTS) $(LD_FLAGS)
+
+.PHONY: report
+report: make_build $(SRC_DIR)/report.tex
+	cp $(SRC_DIR)/report.tex $(BUILD_DIR)/.;
+	cd $(BUILD_DIR) && \
+	pdflatex report.tex && \
+	mv report.pdf ../.
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 	$(C_COMPILER) $(C_FLAGS) -I$(INCLUDE_DIR) -o $@ -c $<
@@ -40,4 +47,4 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c $(HEADERS)
 .PHONY: clean
 clean:
 	rm -rf $(BUILD_DIR)
-	rm -f  $(TARGET)
+	rm -f  $(TARGETS) report.pdf
