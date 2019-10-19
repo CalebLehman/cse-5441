@@ -46,6 +46,7 @@ if __name__ == '__main__':
         print(f'test-name : name of test')
         print(f'amr-output: (concatenation of) output file(s) from amr run')
         print(f'plt-file  : name of output image file for plot')
+        exit()
     test_name    = sys.argv[1]
     amr_out_file = sys.argv[2]
     plt_out_file = sys.argv[3]
