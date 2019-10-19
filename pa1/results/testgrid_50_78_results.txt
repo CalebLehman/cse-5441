@@ -10,10 +10,14 @@ results:
 
 timing:
 => time-seconds    0.000000
-=> clock-seconds   0.020000
-=> gettime-seconds 0.019206
+=> clock-seconds   0.010000
+=> gettime-seconds 0.018252
 ========================================
 
+
+real	0m0.075s
+user	0m0.025s
+sys	0m0.013s
 ========================================
 params:
 => affect_rate 0.010000
@@ -27,9 +31,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.010000
-=> gettime-seconds 0.017248
+=> gettime-seconds 0.016074
 ========================================
 
+
+real	0m0.074s
+user	0m0.023s
+sys	0m0.013s
 ========================================
 params:
 => affect_rate 0.010000
@@ -43,9 +51,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.010000
-=> gettime-seconds 0.015701
+=> gettime-seconds 0.014867
 ========================================
 
+
+real	0m0.074s
+user	0m0.017s
+sys	0m0.018s
 ========================================
 params:
 => affect_rate 0.010000
@@ -59,9 +71,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.010000
-=> gettime-seconds 0.014922
+=> gettime-seconds 0.013984
 ========================================
 
+
+real	0m0.073s
+user	0m0.016s
+sys	0m0.018s
 ========================================
 params:
 => affect_rate 0.010000
@@ -75,9 +91,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.010000
-=> gettime-seconds 0.014418
+=> gettime-seconds 0.013278
 ========================================
 
+
+real	0m0.073s
+user	0m0.024s
+sys	0m0.010s
 ========================================
 params:
 => affect_rate 0.020000
@@ -91,9 +111,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.009951
+=> gettime-seconds 0.009107
 ========================================
 
+
+real	0m0.070s
+user	0m0.015s
+sys	0m0.014s
 ========================================
 params:
 => affect_rate 0.020000
@@ -107,9 +131,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.008502
+=> gettime-seconds 0.008070
 ========================================
 
+
+real	0m0.071s
+user	0m0.017s
+sys	0m0.011s
 ========================================
 params:
 => affect_rate 0.020000
@@ -123,9 +151,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.007832
+=> gettime-seconds 0.007453
 ========================================
 
+
+real	0m0.069s
+user	0m0.019s
+sys	0m0.009s
 ========================================
 params:
 => affect_rate 0.020000
@@ -139,9 +171,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.007415
+=> gettime-seconds 0.006995
 ========================================
 
+
+real	0m0.070s
+user	0m0.017s
+sys	0m0.010s
 ========================================
 params:
 => affect_rate 0.020000
@@ -155,9 +191,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.007141
+=> gettime-seconds 0.006666
 ========================================
 
+
+real	0m0.068s
+user	0m0.014s
+sys	0m0.013s
 ========================================
 params:
 => affect_rate 0.030000
@@ -171,9 +211,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.006358
+=> gettime-seconds 0.006056
 ========================================
 
+
+real	0m0.070s
+user	0m0.016s
+sys	0m0.011s
 ========================================
 params:
 => affect_rate 0.030000
@@ -187,9 +231,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.005667
+=> gettime-seconds 0.005390
 ========================================
 
+
+real	0m0.068s
+user	0m0.015s
+sys	0m0.011s
 ========================================
 params:
 => affect_rate 0.030000
@@ -203,9 +251,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.005212
+=> gettime-seconds 0.004955
 ========================================
 
+
+real	0m0.067s
+user	0m0.015s
+sys	0m0.010s
 ========================================
 params:
 => affect_rate 0.030000
@@ -219,9 +271,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.005166
+=> gettime-seconds 0.004646
 ========================================
 
+
+real	0m0.068s
+user	0m0.011s
+sys	0m0.014s
 ========================================
 params:
 => affect_rate 0.030000
@@ -235,9 +291,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.004648
+=> gettime-seconds 0.004436
 ========================================
 
+
+real	0m0.067s
+user	0m0.014s
+sys	0m0.011s
 ========================================
 params:
 => affect_rate 0.040000
@@ -251,9 +311,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.004757
+=> gettime-seconds 0.004783
 ========================================
 
+
+real	0m0.066s
+user	0m0.011s
+sys	0m0.014s
 ========================================
 params:
 => affect_rate 0.040000
@@ -267,9 +331,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.004242
+=> gettime-seconds 0.004029
 ========================================
 
+
+real	0m0.066s
+user	0m0.008s
+sys	0m0.016s
 ========================================
 params:
 => affect_rate 0.040000
@@ -283,9 +351,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.003908
+=> gettime-seconds 0.003721
 ========================================
 
+
+real	0m0.066s
+user	0m0.010s
+sys	0m0.015s
 ========================================
 params:
 => affect_rate 0.040000
@@ -299,9 +371,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.003671
+=> gettime-seconds 0.003487
 ========================================
 
+
+real	0m0.065s
+user	0m0.012s
+sys	0m0.012s
 ========================================
 params:
 => affect_rate 0.040000
@@ -315,9 +391,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.003503
+=> gettime-seconds 0.003254
 ========================================
 
+
+real	0m0.065s
+user	0m0.015s
+sys	0m0.008s
 ========================================
 params:
 => affect_rate 0.050000
@@ -331,9 +411,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.003860
+=> gettime-seconds 0.003947
 ========================================
 
+
+real	0m0.066s
+user	0m0.014s
+sys	0m0.011s
 ========================================
 params:
 => affect_rate 0.050000
@@ -347,9 +431,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.003415
+=> gettime-seconds 0.003085
 ========================================
 
+
+real	0m0.065s
+user	0m0.009s
+sys	0m0.015s
 ========================================
 params:
 => affect_rate 0.050000
@@ -363,9 +451,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.003127
+=> gettime-seconds 0.002983
 ========================================
 
+
+real	0m0.065s
+user	0m0.014s
+sys	0m0.010s
 ========================================
 params:
 => affect_rate 0.050000
@@ -379,9 +471,13 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.002940
+=> gettime-seconds 0.002792
 ========================================
 
+
+real	0m0.065s
+user	0m0.008s
+sys	0m0.016s
 ========================================
 params:
 => affect_rate 0.050000
@@ -395,6 +491,10 @@ results:
 timing:
 => time-seconds    0.000000
 => clock-seconds   0.000000
-=> gettime-seconds 0.002788
+=> gettime-seconds 0.002501
 ========================================
 
+
+real	0m0.064s
+user	0m0.012s
+sys	0m0.012s

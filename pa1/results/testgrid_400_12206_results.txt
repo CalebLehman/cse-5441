@@ -9,11 +9,15 @@ results:
 => min-DSV    0.085031
 
 timing:
-=> time-seconds    337.000000
-=> clock-seconds   336.070000
-=> gettime-seconds 336.853442
+=> time-seconds    338.000000
+=> clock-seconds   337.360000
+=> gettime-seconds 338.161355
 ========================================
 
+
+real	5m38.231s
+user	5m37.386s
+sys	0m0.018s
 ========================================
 params:
 => affect_rate 0.010000
@@ -25,11 +29,15 @@ results:
 => min-DSV    0.084182
 
 timing:
-=> time-seconds    262.000000
-=> clock-seconds   261.300000
-=> gettime-seconds 261.919111
+=> time-seconds    261.000000
+=> clock-seconds   260.470000
+=> gettime-seconds 261.091446
 ========================================
 
+
+real	4m21.181s
+user	4m20.495s
+sys	0m0.021s
 ========================================
 params:
 => affect_rate 0.010000
@@ -42,10 +50,14 @@ results:
 
 timing:
 => time-seconds    217.000000
-=> clock-seconds   216.190000
-=> gettime-seconds 216.714288
+=> clock-seconds   216.370000
+=> gettime-seconds 216.891195
 ========================================
 
+
+real	3m36.958s
+user	3m36.396s
+sys	0m0.020s
 ========================================
 params:
 => affect_rate 0.010000
@@ -57,11 +69,15 @@ results:
 => min-DSV    0.082588
 
 timing:
-=> time-seconds    188.000000
-=> clock-seconds   186.900000
-=> gettime-seconds 187.342413
+=> time-seconds    187.000000
+=> clock-seconds   186.530000
+=> gettime-seconds 186.977788
 ========================================
 
+
+real	3m7.034s
+user	3m6.541s
+sys	0m0.025s
 ========================================
 params:
 => affect_rate 0.010000
@@ -74,10 +90,14 @@ results:
 
 timing:
 => time-seconds    167.000000
-=> clock-seconds   166.240000
-=> gettime-seconds 166.624988
+=> clock-seconds   166.230000
+=> gettime-seconds 166.620520
 ========================================
 
+
+real	2m46.683s
+user	2m46.255s
+sys	0m0.009s
 ========================================
 params:
 => affect_rate 0.020000
@@ -90,10 +110,14 @@ results:
 
 timing:
 => time-seconds    175.000000
-=> clock-seconds   174.640000
-=> gettime-seconds 175.055867
+=> clock-seconds   174.900000
+=> gettime-seconds 175.313360
 ========================================
 
+
+real	2m55.373s
+user	2m54.921s
+sys	0m0.016s
 ========================================
 params:
 => affect_rate 0.020000
@@ -106,10 +130,14 @@ results:
 
 timing:
 => time-seconds    135.000000
-=> clock-seconds   134.740000
-=> gettime-seconds 135.055829
+=> clock-seconds   135.060000
+=> gettime-seconds 135.371355
 ========================================
 
+
+real	2m15.429s
+user	2m15.078s
+sys	0m0.010s
 ========================================
 params:
 => affect_rate 0.020000
@@ -122,10 +150,14 @@ results:
 
 timing:
 => time-seconds    112.000000
-=> clock-seconds   111.280000
-=> gettime-seconds 111.542068
+=> clock-seconds   111.160000
+=> gettime-seconds 111.420927
 ========================================
 
+
+real	1m51.484s
+user	1m51.177s
+sys	0m0.014s
 ========================================
 params:
 => affect_rate 0.020000
@@ -137,11 +169,15 @@ results:
 => min-DSV    0.082588
 
 timing:
-=> time-seconds    95.000000
-=> clock-seconds   94.880000
-=> gettime-seconds 95.097199
+=> time-seconds    96.000000
+=> clock-seconds   95.210000
+=> gettime-seconds 95.434483
 ========================================
 
+
+real	1m35.511s
+user	1m35.230s
+sys	0m0.016s
 ========================================
 params:
 => affect_rate 0.020000
@@ -154,10 +190,14 @@ results:
 
 timing:
 => time-seconds    85.000000
-=> clock-seconds   84.270000
-=> gettime-seconds 84.470994
+=> clock-seconds   84.410000
+=> gettime-seconds 84.609175
 ========================================
 
+
+real	1m24.667s
+user	1m24.429s
+sys	0m0.015s
 ========================================
 params:
 => affect_rate 0.030000
@@ -169,11 +209,15 @@ results:
 => min-DSV    0.085031
 
 timing:
-=> time-seconds    118.000000
-=> clock-seconds   117.480000
-=> gettime-seconds 117.772088
+=> time-seconds    119.000000
+=> clock-seconds   118.250000
+=> gettime-seconds 118.524915
 ========================================
 
+
+real	1m58.582s
+user	1m58.260s
+sys	0m0.020s
 ========================================
 params:
 => affect_rate 0.030000
@@ -186,10 +230,14 @@ results:
 
 timing:
 => time-seconds    91.000000
-=> clock-seconds   90.470000
-=> gettime-seconds 90.679925
+=> clock-seconds   90.560000
+=> gettime-seconds 90.786493
 ========================================
 
+
+real	1m30.848s
+user	1m30.584s
+sys	0m0.015s
 ========================================
 params:
 => affect_rate 0.030000
@@ -202,10 +250,14 @@ results:
 
 timing:
 => time-seconds    75.000000
-=> clock-seconds   74.500000
-=> gettime-seconds 74.673537
+=> clock-seconds   74.410000
+=> gettime-seconds 74.582028
 ========================================
 
+
+real	1m14.640s
+user	1m14.432s
+sys	0m0.010s
 ========================================
 params:
 => affect_rate 0.030000
@@ -218,10 +270,14 @@ results:
 
 timing:
 => time-seconds    64.000000
-=> clock-seconds   63.590000
-=> gettime-seconds 63.744675
+=> clock-seconds   63.830000
+=> gettime-seconds 63.977330
 ========================================
 
+
+real	1m4.038s
+user	1m3.851s
+sys	0m0.012s
 ========================================
 params:
 => affect_rate 0.030000
@@ -234,10 +290,14 @@ results:
 
 timing:
 => time-seconds    57.000000
-=> clock-seconds   56.600000
-=> gettime-seconds 56.733716
+=> clock-seconds   56.630000
+=> gettime-seconds 56.763502
 ========================================
 
+
+real	0m56.821s
+user	0m56.653s
+sys	0m0.013s
 ========================================
 params:
 => affect_rate 0.040000
@@ -250,10 +310,14 @@ results:
 
 timing:
 => time-seconds    89.000000
-=> clock-seconds   88.920000
-=> gettime-seconds 89.133764
+=> clock-seconds   88.990000
+=> gettime-seconds 89.193386
 ========================================
 
+
+real	1m29.253s
+user	1m29.007s
+sys	0m0.012s
 ========================================
 params:
 => affect_rate 0.040000
@@ -265,11 +329,15 @@ results:
 => min-DSV    0.082211
 
 timing:
-=> time-seconds    68.000000
-=> clock-seconds   68.040000
-=> gettime-seconds 68.204047
+=> time-seconds    69.000000
+=> clock-seconds   68.430000
+=> gettime-seconds 68.593662
 ========================================
 
+
+real	1m8.657s
+user	1m8.457s
+sys	0m0.012s
 ========================================
 params:
 => affect_rate 0.040000
@@ -281,11 +349,15 @@ results:
 => min-DSV    0.081800
 
 timing:
-=> time-seconds    56.000000
-=> clock-seconds   55.760000
-=> gettime-seconds 55.902009
+=> time-seconds    57.000000
+=> clock-seconds   56.340000
+=> gettime-seconds 56.472203
 ========================================
 
+
+real	0m56.531s
+user	0m56.370s
+sys	0m0.006s
 ========================================
 params:
 => affect_rate 0.040000
@@ -298,10 +370,14 @@ results:
 
 timing:
 => time-seconds    48.000000
-=> clock-seconds   48.030000
-=> gettime-seconds 48.139505
+=> clock-seconds   48.150000
+=> gettime-seconds 48.257271
 ========================================
 
+
+real	0m48.317s
+user	0m48.167s
+sys	0m0.013s
 ========================================
 params:
 => affect_rate 0.040000
@@ -314,10 +390,14 @@ results:
 
 timing:
 => time-seconds    43.000000
-=> clock-seconds   42.790000
-=> gettime-seconds 42.895119
+=> clock-seconds   42.770000
+=> gettime-seconds 42.887716
 ========================================
 
+
+real	0m42.947s
+user	0m42.784s
+sys	0m0.028s
 ========================================
 params:
 => affect_rate 0.050000
@@ -330,10 +410,14 @@ results:
 
 timing:
 => time-seconds    72.000000
-=> clock-seconds   71.200000
-=> gettime-seconds 71.364902
+=> clock-seconds   71.420000
+=> gettime-seconds 71.595459
 ========================================
 
+
+real	1m11.653s
+user	1m11.451s
+sys	0m0.011s
 ========================================
 params:
 => affect_rate 0.050000
@@ -346,10 +430,14 @@ results:
 
 timing:
 => time-seconds    55.000000
-=> clock-seconds   54.570000
-=> gettime-seconds 54.699076
+=> clock-seconds   54.760000
+=> gettime-seconds 54.888803
 ========================================
 
+
+real	0m54.946s
+user	0m54.779s
+sys	0m0.017s
 ========================================
 params:
 => affect_rate 0.050000
@@ -361,11 +449,15 @@ results:
 => min-DSV    0.082158
 
 timing:
-=> time-seconds    46.000000
-=> clock-seconds   45.180000
-=> gettime-seconds 45.279984
+=> time-seconds    45.000000
+=> clock-seconds   45.270000
+=> gettime-seconds 45.381574
 ========================================
 
+
+real	0m45.442s
+user	0m45.288s
+sys	0m0.019s
 ========================================
 params:
 => affect_rate 0.050000
@@ -378,10 +470,14 @@ results:
 
 timing:
 => time-seconds    39.000000
-=> clock-seconds   38.410000
-=> gettime-seconds 38.498613
+=> clock-seconds   38.750000
+=> gettime-seconds 38.843961
 ========================================
 
+
+real	0m38.903s
+user	0m38.772s
+sys	0m0.017s
 ========================================
 params:
 => affect_rate 0.050000
@@ -394,7 +490,11 @@ results:
 
 timing:
 => time-seconds    34.000000
-=> clock-seconds   34.070000
-=> gettime-seconds 34.153669
+=> clock-seconds   34.180000
+=> gettime-seconds 34.260241
 ========================================
 
+
+real	0m34.322s
+user	0m34.207s
+sys	0m0.009s
