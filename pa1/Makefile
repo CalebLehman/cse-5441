@@ -1,5 +1,6 @@
-# Makefile created for users without a working CMake installation
-# Building using CMake is preferred
+# Makefile for building
+#   - amr executable
+#   - lab report
 
 SRC_DIR     = ./src
 BUILD_DIR   = ./build

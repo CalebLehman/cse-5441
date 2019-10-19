@@ -22,7 +22,7 @@ print(' '.join(map(lambda x: str(round(x, 2)), vals)))"\
   for affect_rate in ${vals}; do
     for epsilon in ${vals}; do
       results_file=${results_dir}/${affect_rate}_${epsilon}
-      time ./amr ${affect_rate} ${epsilon} <${test_file} 2>&1 | tee -a ${results_file} &
+      { time ./amr ${affect_rate} ${epsilon} <${test_file}; } 2>&1 | tee -a ${results_file} &
     done
   done
   wait $(jobs -rp)
@@ -37,16 +37,12 @@ print(' '.join(map(lambda x: str(round(x, 2)), vals)))"\
 # Load modules
 module load intel
 module load python
-module load cmake
 
 # Move sources to TMPDIR and build
 cd ${TMPDIR}
 cp ${PBS_O_WORKDIR}/* . -rp
 
-mkdir build && cd build
-CC=icc cmake ..
-make
-mv amr ../. && cd ..
+make clean && make
 
 # Run tests
 mkdir -p ${PBS_O_WORKDIR}/results
