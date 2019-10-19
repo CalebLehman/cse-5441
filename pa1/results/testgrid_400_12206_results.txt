@@ -1,0 +1,400 @@
+========================================
+params:
+=> affect_rate 0.010000
+=> epsilon     0.010000
+
+results:
+=> iterations 2079750
+=> max-DSV    0.085889
+=> min-DSV    0.085031
+
+timing:
+=> time-seconds    337.000000
+=> clock-seconds   336.070000
+=> gettime-seconds 336.853442
+========================================
+
+========================================
+params:
+=> affect_rate 0.010000
+=> epsilon     0.020000
+
+results:
+=> iterations 1589637
+=> max-DSV    0.085900
+=> min-DSV    0.084182
+
+timing:
+=> time-seconds    262.000000
+=> clock-seconds   261.300000
+=> gettime-seconds 261.919111
+========================================
+
+========================================
+params:
+=> affect_rate 0.010000
+=> epsilon     0.030000
+
+results:
+=> iterations 1302427
+=> max-DSV    0.085983
+=> min-DSV    0.083403
+
+timing:
+=> time-seconds    217.000000
+=> clock-seconds   216.190000
+=> gettime-seconds 216.714288
+========================================
+
+========================================
+params:
+=> affect_rate 0.010000
+=> epsilon     0.040000
+
+results:
+=> iterations 1113979
+=> max-DSV    0.086029
+=> min-DSV    0.082588
+
+timing:
+=> time-seconds    188.000000
+=> clock-seconds   186.900000
+=> gettime-seconds 187.342413
+========================================
+
+========================================
+params:
+=> affect_rate 0.010000
+=> epsilon     0.050000
+
+results:
+=> iterations 986566
+=> max-DSV    0.086031
+=> min-DSV    0.081729
+
+timing:
+=> time-seconds    167.000000
+=> clock-seconds   166.240000
+=> gettime-seconds 166.624988
+========================================
+
+========================================
+params:
+=> affect_rate 0.020000
+=> epsilon     0.010000
+
+results:
+=> iterations 1039875
+=> max-DSV    0.085889
+=> min-DSV    0.085031
+
+timing:
+=> time-seconds    175.000000
+=> clock-seconds   174.640000
+=> gettime-seconds 175.055867
+========================================
+
+========================================
+params:
+=> affect_rate 0.020000
+=> epsilon     0.020000
+
+results:
+=> iterations 794818
+=> max-DSV    0.085900
+=> min-DSV    0.084182
+
+timing:
+=> time-seconds    135.000000
+=> clock-seconds   134.740000
+=> gettime-seconds 135.055829
+========================================
+
+========================================
+params:
+=> affect_rate 0.020000
+=> epsilon     0.030000
+
+results:
+=> iterations 651213
+=> max-DSV    0.085983
+=> min-DSV    0.083403
+
+timing:
+=> time-seconds    112.000000
+=> clock-seconds   111.280000
+=> gettime-seconds 111.542068
+========================================
+
+========================================
+params:
+=> affect_rate 0.020000
+=> epsilon     0.040000
+
+results:
+=> iterations 556989
+=> max-DSV    0.086029
+=> min-DSV    0.082588
+
+timing:
+=> time-seconds    95.000000
+=> clock-seconds   94.880000
+=> gettime-seconds 95.097199
+========================================
+
+========================================
+params:
+=> affect_rate 0.020000
+=> epsilon     0.050000
+
+results:
+=> iterations 493282
+=> max-DSV    0.086031
+=> min-DSV    0.081729
+
+timing:
+=> time-seconds    85.000000
+=> clock-seconds   84.270000
+=> gettime-seconds 84.470994
+========================================
+
+========================================
+params:
+=> affect_rate 0.030000
+=> epsilon     0.010000
+
+results:
+=> iterations 693249
+=> max-DSV    0.085889
+=> min-DSV    0.085031
+
+timing:
+=> time-seconds    118.000000
+=> clock-seconds   117.480000
+=> gettime-seconds 117.772088
+========================================
+
+========================================
+params:
+=> affect_rate 0.030000
+=> epsilon     0.020000
+
+results:
+=> iterations 529879
+=> max-DSV    0.085900
+=> min-DSV    0.084182
+
+timing:
+=> time-seconds    91.000000
+=> clock-seconds   90.470000
+=> gettime-seconds 90.679925
+========================================
+
+========================================
+params:
+=> affect_rate 0.030000
+=> epsilon     0.030000
+
+results:
+=> iterations 434142
+=> max-DSV    0.085983
+=> min-DSV    0.083403
+
+timing:
+=> time-seconds    75.000000
+=> clock-seconds   74.500000
+=> gettime-seconds 74.673537
+========================================
+
+========================================
+params:
+=> affect_rate 0.030000
+=> epsilon     0.040000
+
+results:
+=> iterations 371326
+=> max-DSV    0.086029
+=> min-DSV    0.082588
+
+timing:
+=> time-seconds    64.000000
+=> clock-seconds   63.590000
+=> gettime-seconds 63.744675
+========================================
+
+========================================
+params:
+=> affect_rate 0.030000
+=> epsilon     0.050000
+
+results:
+=> iterations 328855
+=> max-DSV    0.086031
+=> min-DSV    0.081729
+
+timing:
+=> time-seconds    57.000000
+=> clock-seconds   56.600000
+=> gettime-seconds 56.733716
+========================================
+
+========================================
+params:
+=> affect_rate 0.040000
+=> epsilon     0.010000
+
+results:
+=> iterations 519937
+=> max-DSV    0.083269
+=> min-DSV    0.082436
+
+timing:
+=> time-seconds    89.000000
+=> clock-seconds   88.920000
+=> gettime-seconds 89.133764
+========================================
+
+========================================
+params:
+=> affect_rate 0.040000
+=> epsilon     0.020000
+
+results:
+=> iterations 397409
+=> max-DSV    0.083889
+=> min-DSV    0.082211
+
+timing:
+=> time-seconds    68.000000
+=> clock-seconds   68.040000
+=> gettime-seconds 68.204047
+========================================
+
+========================================
+params:
+=> affect_rate 0.040000
+=> epsilon     0.030000
+
+results:
+=> iterations 325606
+=> max-DSV    0.084330
+=> min-DSV    0.081800
+
+timing:
+=> time-seconds    56.000000
+=> clock-seconds   55.760000
+=> gettime-seconds 55.902009
+========================================
+
+========================================
+params:
+=> affect_rate 0.040000
+=> epsilon     0.040000
+
+results:
+=> iterations 278494
+=> max-DSV    0.084613
+=> min-DSV    0.081228
+
+timing:
+=> time-seconds    48.000000
+=> clock-seconds   48.030000
+=> gettime-seconds 48.139505
+========================================
+
+========================================
+params:
+=> affect_rate 0.040000
+=> epsilon     0.050000
+
+results:
+=> iterations 246641
+=> max-DSV    0.084775
+=> min-DSV    0.080537
+
+timing:
+=> time-seconds    43.000000
+=> clock-seconds   42.790000
+=> gettime-seconds 42.895119
+========================================
+
+========================================
+params:
+=> affect_rate 0.050000
+=> epsilon     0.010000
+
+results:
+=> iterations 415949
+=> max-DSV    0.083851
+=> min-DSV    0.083013
+
+timing:
+=> time-seconds    72.000000
+=> clock-seconds   71.200000
+=> gettime-seconds 71.364902
+========================================
+
+========================================
+params:
+=> affect_rate 0.050000
+=> epsilon     0.020000
+
+results:
+=> iterations 317927
+=> max-DSV    0.084337
+=> min-DSV    0.082650
+
+timing:
+=> time-seconds    55.000000
+=> clock-seconds   54.570000
+=> gettime-seconds 54.699076
+========================================
+
+========================================
+params:
+=> affect_rate 0.050000
+=> epsilon     0.030000
+
+results:
+=> iterations 260485
+=> max-DSV    0.084699
+=> min-DSV    0.082158
+
+timing:
+=> time-seconds    46.000000
+=> clock-seconds   45.180000
+=> gettime-seconds 45.279984
+========================================
+
+========================================
+params:
+=> affect_rate 0.050000
+=> epsilon     0.040000
+
+results:
+=> iterations 222795
+=> max-DSV    0.084929
+=> min-DSV    0.081532
+
+timing:
+=> time-seconds    39.000000
+=> clock-seconds   38.410000
+=> gettime-seconds 38.498613
+========================================
+
+========================================
+params:
+=> affect_rate 0.050000
+=> epsilon     0.050000
+
+results:
+=> iterations 197312
+=> max-DSV    0.085056
+=> min-DSV    0.080804
+
+timing:
+=> time-seconds    34.000000
+=> clock-seconds   34.070000
+=> gettime-seconds 34.153669
+========================================
+

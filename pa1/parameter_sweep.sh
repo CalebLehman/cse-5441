@@ -1,9 +1,8 @@
 #PBS -N parameter-sweep
-#PBS -l walltime=1:00:00
+#PBS -l walltime=0:30:00
 #PBS -l nodes=1:ppn=40
 #PBS -j oe
 #PBS -A PZS0711
-#PBS -q debug
 
 run_tests() {
   local test_file="$1"
@@ -17,7 +16,7 @@ run_tests() {
   # Run tests
   vals=$(python -c "\
 import numpy as np; \
-vals = np.linspace(0.10, 0.09, 2); \
+vals = np.linspace(0.05, 0.01, 5); \
 print(' '.join(map(lambda x: str(round(x, 2)), vals)))"\
   )
   for affect_rate in ${vals}; do
@@ -59,10 +58,10 @@ done
 
 # Process results
 for test_file in ${test_files[@]}; do
-  results_file=$(basename ${test_file})_results.txt
-  plt_out_file=$(basename ${test_file})_results.png
-  python process_parameter_sweep.py ${results_file} ${plt_out_file}
+  test_name=$(basename ${test_file})
+  results_file=${test_name}_results.txt
+  plt_out_file=${test_name}_results.png
+  python process_parameter_sweep.py ${test_name} ${results_file} ${plt_out_file}
   mv ${results_file} ${PBS_O_WORKDIR}/results/.
   mv ${plt_out_file} ${PBS_O_WORKDIR}/results/.
 done
-wait $(jobs -rp)
