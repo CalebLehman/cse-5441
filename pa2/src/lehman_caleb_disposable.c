@@ -77,18 +77,14 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
      */
     AMRMaxMin max_min = getMaxMin(input);
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
+
+    WorkerData* data_structs = malloc(num_threads * sizeof(*data_structs));
+    pthread_t*  threads      = malloc(num_threads * sizeof(*threads));
     unsigned long iter;
     for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
-        #if (PRINT_DSVS != 0)
-        printf("BEGIN ITERATION %lu\n", iter + 1);
-        printDSVs(input->N, input->vals);
-        #endif
-
         /**
          * For each thread
          */
-        WorkerData* data_structs = malloc(num_threads * sizeof(*data_structs));
-        pthread_t*  threads      = malloc(num_threads * sizeof(*threads));
         for (Count tid = 0; tid < num_threads; ++tid) {
             data_structs[tid].input        = input;
             data_structs[tid].affect_rate  = affect_rate;
@@ -111,7 +107,10 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
         input->vals = updated_vals;
         updated_vals = temp;
     }
+
     free(updated_vals);
+    free(data_structs);
+    free(threads);
 
     AMROutput result;
     result.affect_rate = affect_rate;
@@ -133,7 +132,6 @@ void* worker(void* data) {
         : (worker_data->tid + 1) * (input->N / worker_data->num_threads);
 
     float affect_rate  = worker_data->affect_rate;
-    DSV*  vals         = worker_data->vals;
     DSV*  updated_vals = worker_data->updated_vals;
 
     /**
@@ -153,6 +151,6 @@ void* worker(void* data) {
             + updated_vals[i] * affect_rate;
     }
 
-    //pthread_exit(NULL);
+    pthread_exit(NULL);
     return NULL;
 }

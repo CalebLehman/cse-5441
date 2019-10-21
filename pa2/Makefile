@@ -7,9 +7,7 @@ BUILD_DIR   = ./build
 INCLUDE_DIR = ./include
 
 C_COMPILER  = icc
-PRINT_DSVS ?= 0
 C_FLAGS     = -O3 \
-              -DPRINT_DSVS=${PRINT_DSVS} \
 			  -Wall \
 			  -Wextra \
 			  -Wshadow \
