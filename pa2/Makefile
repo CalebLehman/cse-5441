@@ -24,7 +24,7 @@ TARGETS = disposable persistent
 all: $(TARGETS)
 
 debug: C_FLAGS += $(DEBUG_FLAGS)
-debug: $(TARGETS) report
+debug: $(TARGETS)
 
 make_build:
 	mkdir -p $(BUILD_DIR)

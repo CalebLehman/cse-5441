@@ -106,6 +106,10 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
     free(threads);
     free(data_structs);
 
+    /**
+     * Clean up
+     */
+    destroyInput(input);
     return result;
 }
 

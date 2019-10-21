@@ -32,6 +32,9 @@
 *.dylib
 
 # Executables
+amr
+disposable
+persistent
 *.exe
 *.out
 *.app

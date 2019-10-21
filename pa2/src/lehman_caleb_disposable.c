@@ -65,6 +65,11 @@ int main(int argc, char** argv) {
      * Display results
      */
     displayOutput(output);
+
+    /**
+     * Clean up
+     */
+    destroyInput(input);
     return 0;
 }
 
