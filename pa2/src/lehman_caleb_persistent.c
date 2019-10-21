@@ -76,6 +76,13 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
     AMRMaxMin max_min = getMaxMin(input);
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
 
+    /**
+     * updated_vals and input->vals are swapped during
+     * execution, need to remember originals for clean up
+     */
+    DSV* orig_vals         = input->vals;
+    DSV* orig_updated_vals = updated_vals;
+
     pthread_barrier_init(&barrier, NULL, num_threads);
     pthread_t* threads       = malloc(num_threads * sizeof(*threads));
     WorkerData* data_structs = malloc(num_threads * sizeof(*data_structs));
@@ -102,7 +109,8 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
     result.max         = max_min.max;
     result.min         = max_min.min;
 
-    free(updated_vals);
+    input->vals = orig_vals;
+    free(orig_updated_vals);
     free(threads);
     free(data_structs);
 

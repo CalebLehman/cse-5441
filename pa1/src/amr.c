@@ -72,6 +72,14 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
      */
     AMRMaxMin max_min = getMaxMin(input);
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
+
+    /**
+     * updated_vals and input->vals are swapped during
+     * execution, need to remember originals for clean up
+     */
+    DSV* orig_vals         = input->vals;
+    DSV* orig_updated_vals = updated_vals;
+
     unsigned long iter;
     for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
         #if (PRINT_DSVS != 0)
@@ -102,7 +110,9 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
         input->vals = updated_vals;
         updated_vals = temp;
     }
-    free(updated_vals);
+
+    input->vals = orig_vals;
+    free(orig_updated_vals);
 
     AMROutput result;
     result.affect_rate = affect_rate;
