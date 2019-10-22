@@ -43,7 +43,7 @@ Caleb Lehman \\
 \section*{Overview}
 \label{sec:overview}
 
-For this lab, I prepared a serial \texttt{C} program to perform a serial
+For this lab, I prepared a (serial) \texttt{C} program to perform a
 Adaptive Mesh Refinement (AMR)\footnote{In this case, the \emph{mesh} is static,
 so the program may be more accurately described as a serial \emph{stencil
 code/computation.}}. The input to the problem is a tiling of a rectuangular
@@ -55,7 +55,7 @@ program then iteratively updates the values in each box based on the current
 values of neighboring boxes. In addition to the inputs described above, two
 additional inputs are given: $\alpha$ (affect-rate), which determines the
 magnitude of the effect of neighboring boxes, and $\varepsilon$ (epsilon),
-which determines when convergence is reached an the program terminates.
+which determines when convergence is reached and the program terminates.
 
 \subsection*{Algorithm}
 \label{subsec:algorithm}
@@ -95,7 +95,7 @@ running the stencil code.
 
 \begin{itemize}
 
-    \item Runtimes increased when either parameter was decrease, as expected.
+    \item Runtimes increased when either parameter was decreased, as expected.
 
     \item Selected parameters $\alpha=0.1$, $\varepsilon=0.2$, which yielded a
     runtime of roughly 4 minutes to run with the
@@ -112,7 +112,7 @@ running the stencil code.
 \subsection*{Environment}
 \label{subsec:environment}
 
-The program was developed and tested on a single node of the
+The program was developed and tested on the
 \href{https://www.osc.edu/resources/technical_support/supercomputers/pitzer}{Pitzer
 cluster} at the \href{https://www.osc.edu/}{Ohio Supercomputer Center}.
 
@@ -121,7 +121,9 @@ program to be compiled with version 18.0.3 of the \texttt{icc} C-compiler.
 
 For testing, I loaded the \texttt{python/3.6-conda5.2} module, which loads a
 python environment with the \texttt{NumPy}, \texttt{SciPy}, and
-\texttt{Matplotlib} packages, amoung others.
+\texttt{Matplotlib} packages, amoung others. \texttt{Python} is only necessary
+for collecting and plotting the data from testing, not for the actual exectuion
+of the program.
 
 \subsection*{Timing}
 \label{subsec:timing}
@@ -196,10 +198,10 @@ In particular, the program took roughly 4 minutes, 21 seconds to run on the
             \hline
         \end{tabular}
 
-        \captionof{table}{Runtimes for each of the test files using
+        \captionof{table}{Runtimes (seconds) for each of the test files using
         parameters $\alpha=0.1$, $\varepsilon=0.2$. Test file names are
-        abbrviated from \texttt{testgrid\textunderscore n\textunderscore m} to \texttt{n,m}.}
-        \label{tab:runtime}
+        abbrviated from \texttt{testgrid\textunderscore n\textunderscore m} to
+        \texttt{n,m}.} \label{tab:runtime}
 
     \end{minipage}
 \end{minipage}
