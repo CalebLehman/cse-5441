@@ -10,26 +10,23 @@ run_tests() {
 
   echo "Running tests with file ${test_file}..."
 
-  # Make directory to store temporary results
-  results_dir=${test_file}_results
-  mkdir ${results_dir}
-
   # Run tests
   threads=$(python -c "\
 print(list(range(20)))"\
   )
-  for t in ${threads}; do
-    results_file=${results_dir}/${affect_rate}_${epsilon}
-      { time ./amr ${affect_rate} ${epsilon} <${test_file}; } 2>&1 | tee -a ${results_file} &
+  for prog in ${programs[@]}; do
+    results_file=$(basename ${test_file})_${prog}_results.txt
+    for t in ${threads}; do
+      { time ./${prog} ${affect_rate} ${epsilon} ${t} <${test_file}; } 2>&1 | tee -a ${results_file}
+    done
   done
-  wait $(jobs -rp)
-
-  # Aggregate results
-  results_file=$(basename ${test_file})_results.txt
-  cat ${results_dir}/* >${results_file}
 
   echo "Finished tests with file ${test_file}"
 }
+
+# Bring in configuration file
+# affect_rate, epsilon, programs, tests
+source tests.cfg
 
 # Load modules
 module load intel
@@ -44,7 +41,6 @@ make clean && make
 # Run tests
 mkdir -p ${PBS_O_WORKDIR}/results
 
-source tests.cfg
 for test_file in ${test_files[@]}; do
   run_tests ${test_file}
 done
@@ -52,9 +48,14 @@ done
 # Process results
 for test_file in ${test_files[@]}; do
   test_name=$(basename ${test_file})
-  results_file=${test_name}_results.txt
+  results_files=
+  for prog in ${programs[@]}; do
+    results_files="${results_files} ${test_name}_${prog}_results.txt"
   plt_out_file=${test_name}_results.png
-  python process_parameter_sweep.py ${test_name} ${results_file} ${plt_out_file}
-  mv ${results_file} ${PBS_O_WORKDIR}/results/.
+  python process_tests.py ${test_name} ${plt_out_file} ${results_files}
+  for prog in ${programs[@]}; do
+    results_file=${test_name}_${prog}_results.txt
+    mv ${results_file} ${PBS_O_WORKDIR}/results/.
+  done
   mv ${plt_out_file} ${PBS_O_WORKDIR}/results/.
 done
