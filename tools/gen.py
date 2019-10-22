@@ -120,25 +120,16 @@ if __name__ == '__main__':
     choice(boxes).v = 100
 
     with open(in_file, 'w') as out_file:
-        out_file.write('# n, rows, cols\n')
         out_file.write(f'{len(boxes)} {rows} {cols}\n')
         for i, box in enumerate(boxes):
             out_file.write('\n')
-            out_file.write(f'# Box {i}\n')
-            out_file.write('# id\n')
             out_file.write(f'{i}\n')
-            out_file.write('# upper-left y, upper-left x, height, width\n')
             out_file.write(f'{box.y} {box.x} {box.h} {box.w}\n')
             top, bottom, left, right = get_nhbrs(box, ids, rows, cols)
-            out_file.write('# num-top-neighbors, list of top neighbors\n')
             out_file.write(f'{len(top)} {" ".join(map(str, top))}\n')
-            out_file.write('# num-bottom-neighbors, list of bottom neighbors\n')
             out_file.write(f'{len(bottom)} {" ".join(map(str, bottom))}\n')
-            out_file.write('# num-left-neighbors, list of left neighbors\n')
             out_file.write(f'{len(left)} {" ".join(map(str, left))}\n')
-            out_file.write('# num-right-neighbors, list of right neighbors\n')
             out_file.write(f'{len(right)} {" ".join(map(str, right))}\n')
-            out_file.write('# DSV\n')
             out_file.write(f'{box.v}\n')
         out_file.write('\n')
         out_file.write('-1\n')
