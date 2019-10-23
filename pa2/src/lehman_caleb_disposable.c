@@ -81,6 +81,8 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
      * Repeat until convergence
      */
     AMRMaxMin max_min = getMaxMin(input);
+    DSV* maxs         = malloc(num_threads * sizeof(*maxs));
+    DSV* mins         = malloc(num_threads * sizeof(*mins));
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
 
     /**
@@ -93,7 +95,7 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
     WorkerData* data_structs = malloc(num_threads * sizeof(*data_structs));
     pthread_t*  threads      = malloc(num_threads * sizeof(*threads));
     unsigned long iter;
-    for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
+    for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter) {
         /**
          * For each thread
          */
@@ -105,7 +107,9 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
             data_structs[tid].num_threads  = num_threads;
             data_structs[tid].vals         = input->vals;
             data_structs[tid].updated_vals = updated_vals;
-            data_structs[tid].max_min      = NULL;
+            data_structs[tid].max_min      = &max_min;
+            data_structs[tid].priv_max     = &maxs[tid];
+            data_structs[tid].priv_min     = &mins[tid];
             pthread_create(&threads[tid], NULL, &worker, (void*)&data_structs[tid]);
         }
         for (Count tid = 0; tid < num_threads; ++tid) {
@@ -118,10 +122,22 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
         DSV* temp = input->vals;
         input->vals = updated_vals;
         updated_vals = temp;
+
+        /**
+         * Update extremal values
+         */
+        max_min.max = maxs[0];
+        max_min.min = mins[0];
+        for (Count tid = 1; tid < num_threads; ++tid) {
+            if (max_min.min > mins[tid]) max_min.min = mins[tid];
+            if (max_min.max < maxs[tid]) max_min.max = maxs[tid];
+        }
     }
 
     input->vals = orig_vals;
     free(orig_updated_vals);
+    free(maxs);
+    free(mins);
     free(data_structs);
     free(threads);
 
@@ -150,6 +166,8 @@ void* worker(void* data) {
     /**
      * For each box handled by this thread
      */
+    DSV priv_max = worker_data->max_min->min;
+    DSV priv_min = worker_data->max_min->max;
     for (Count i = start; i < end; ++i) {
         BoxData* box = &input->boxes[i];
         /**
@@ -162,7 +180,18 @@ void* worker(void* data) {
         updated_vals[i] /= box->perimeter;
         updated_vals[i] = input->vals[i] * (1 - affect_rate)
             + updated_vals[i] * affect_rate;
+
+        /**
+         * Update extremal values
+         */
+        if (updated_vals[i] > priv_max) {
+            priv_max = updated_vals[i];
+        } else if (updated_vals[i] < priv_min) {
+            priv_min = updated_vals[i];
+        }
     }
+    *(worker_data->priv_max) = priv_max;
+    *(worker_data->priv_min) = priv_min;
 
     pthread_exit(NULL);
     return NULL;

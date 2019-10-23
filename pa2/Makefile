@@ -8,6 +8,7 @@ INCLUDE_DIR = ./include
 
 C_COMPILER  = icc
 C_FLAGS     = -O3 \
+              -DCACHE_LINE=$(shell getconf LEVEL1_DCACHE_LINESIZE) \
 			  -Wall \
 			  -Wextra \
 			  -Wshadow \

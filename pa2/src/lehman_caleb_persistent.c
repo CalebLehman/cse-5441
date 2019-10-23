@@ -16,6 +16,12 @@ num-threads: number of threads to spawn for computation\n\
              should be positive\n";
 pthread_barrier_t barrier;
 
+/**
+ * Arrays to hold per-thread extremal values
+ */
+DSV* maxs;
+DSV* mins;
+
 int main(int argc, char** argv) {
     /**
      * Parse command-line arguments
@@ -73,6 +79,8 @@ int main(int argc, char** argv) {
  * {@inheritDoc}
  */
 AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threads) {
+    maxs              = malloc(num_threads * sizeof(*maxs));
+    mins              = malloc(num_threads * sizeof(*mins));
     AMRMaxMin max_min = getMaxMin(input);
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
 
@@ -95,6 +103,8 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
         data_structs[tid].vals         = input->vals;
         data_structs[tid].updated_vals = updated_vals;
         data_structs[tid].max_min      = &max_min;
+        data_structs[tid].priv_max     = &maxs[tid];
+        data_structs[tid].priv_min     = &mins[tid];
         pthread_create(&threads[tid], NULL, &worker, (void*)&data_structs[tid]);
     }
 
@@ -111,6 +121,8 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
 
     input->vals = orig_vals;
     free(orig_updated_vals);
+    free(maxs);
+    free(mins);
     free(threads);
     free(data_structs);
 
@@ -144,6 +156,8 @@ void* worker(void* data) {
         /**
          * For each box handled by this thread
          */
+        DSV priv_max = max_min->min;
+        DSV priv_min = max_min->max;
         for (Count i = start; i < end; ++i) {
             BoxData* box = &input->boxes[i];
             /**
@@ -156,7 +170,18 @@ void* worker(void* data) {
             updated_vals[i] /= box->perimeter;
             updated_vals[i] = input->vals[i] * (1 - affect_rate)
                 + updated_vals[i] * affect_rate;
+
+            /**
+             * Update extremal values
+             */
+            if (updated_vals[i] > priv_max) {
+                priv_max = updated_vals[i];
+            } else if (updated_vals[i] < priv_min) {
+                priv_min = updated_vals[i];
+            }
         }
+        *(worker_data->priv_max) = priv_max;
+        *(worker_data->priv_min) = priv_min;
 
         /**
          * Commit updates
@@ -178,19 +203,25 @@ void* worker(void* data) {
              */
             if (tid == 0) {
                 input->vals = updated_vals;
-                *max_min = getMaxMin(input);
-            }
 
-            /**
-             * Synchronize with other threads
-             */
-            pthread_barrier_wait(&barrier);
+                for (Count alt_tid = 1; alt_tid < num_threads; ++alt_tid) {
+                    if (priv_min > mins[alt_tid]) priv_min = mins[alt_tid];
+                    if (priv_max < maxs[alt_tid]) priv_max = maxs[alt_tid];
+                }
+                max_min->max = priv_max;
+                max_min->min = priv_min;
+            }
 
             /**
              * Finish swapping updated_vals to point to
              * the array that was hold previous DSVs
              */
             updated_vals = temp;
+
+            /**
+             * Synchronize with other threads
+             */
+            pthread_barrier_wait(&barrier);
         }
     }
 

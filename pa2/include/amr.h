@@ -22,6 +22,8 @@ typedef struct WorkerData {
     DSV*      updated_vals;
 
     AMRMaxMin* max_min;
+    DSV*       priv_max;
+    DSV*       priv_min;
 } WorkerData;
 /**
  * Code run by each thread during single iteration.
