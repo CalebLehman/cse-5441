@@ -11,22 +11,16 @@ run_tests() {
   echo "Running tests with file ${test_file}..."
 
   # Run tests
-  threads=$(python -c "\
-print(list(range(20)))"\
-  )
   for prog in ${programs[@]}; do
     results_file=$(basename ${test_file})_${prog}_results.txt
     for t in ${threads}; do
+      echo "=> threads ${t}" | tee -a ${results_file}
       { time ./${prog} ${affect_rate} ${epsilon} ${t} <${test_file}; } 2>&1 | tee -a ${results_file}
     done
   done
 
   echo "Finished tests with file ${test_file}"
 }
-
-# Bring in configuration file
-# affect_rate, epsilon, programs, tests
-source tests.cfg
 
 # Load modules
 module load intel
@@ -37,6 +31,10 @@ cd ${TMPDIR}
 cp ${PBS_O_WORKDIR}/* . -rp
 
 make clean && make
+
+# Bring in configuration file
+# affect_rate, epsilon, programs, tests
+source tests.cfg
 
 # Run tests
 mkdir -p ${PBS_O_WORKDIR}/results
@@ -51,11 +49,12 @@ for test_file in ${test_files[@]}; do
   results_files=
   for prog in ${programs[@]}; do
     results_files="${results_files} ${test_name}_${prog}_results.txt"
+  done
   plt_out_file=${test_name}_results.png
-  python process_tests.py ${test_name} ${plt_out_file} ${results_files}
+  echo "python process_results.py ${test_name} ${plt_out_file} ${results_files}"
   for prog in ${programs[@]}; do
     results_file=${test_name}_${prog}_results.txt
     mv ${results_file} ${PBS_O_WORKDIR}/results/.
   done
-  mv ${plt_out_file} ${PBS_O_WORKDIR}/results/.
+  echo "mv ${plt_out_file} ${PBS_O_WORKDIR}/results/."
 done
