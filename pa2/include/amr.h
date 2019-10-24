@@ -2,6 +2,40 @@
 
 #include "common.h"
 
+Count* starts;
+
+/**
+ * Computes starting and ending interations
+ * so that each thread has roughly equal number of
+ * neighbors to handle
+ */
+void splitByNhbrs(AMRInput* input, Count num_threads) {
+    /**
+     * Track number of arithmetic ops (+, *, /)
+     */
+    Count total = 0;
+    for (Count i = 0; i < input->N; ++i) {
+        total += 2 + 2 * input->boxes[i].num_nhbrs + 4;
+    }
+
+    starts[0]         = 0;
+    Count curr_id     = 0;
+    Count curr_total  = 0;
+    Count curr_target = total / num_threads;
+    for (Count i = 0; i < input->N - 1; ++i) {
+        curr_total += 2 + 2 * input->boxes[i].num_nhbrs + 4;
+        if (curr_total >= curr_target) {
+            total      -= curr_total;
+            curr_target = total / (num_threads - curr_id - 1);
+
+            curr_id        += 1;
+            starts[curr_id] = i + 1;
+            curr_total      = 0;
+        }
+    }
+    starts[num_threads] = input->N;
+}
+
 /**
  * Run Adaptive Mesh Refinement using
  * the given input and parameters.

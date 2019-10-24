@@ -84,8 +84,6 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
     DSV* maxs         = malloc(num_threads * sizeof(*maxs));
     DSV* mins         = malloc(num_threads * sizeof(*mins));
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
-    starts = malloc((num_threads + 1) * sizeof(*starts));
-    splitByNhbrs(input, num_threads);
 
     /**
      * updated_vals and input->vals are swapped during
@@ -142,7 +140,6 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
     free(mins);
     free(data_structs);
     free(threads);
-    free(starts);
 
     AMROutput result;
     result.affect_rate = affect_rate;
@@ -155,10 +152,11 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
 
 void* worker(void* data) {
     WorkerData* worker_data = (WorkerData*)data;
-    Count     tid   = worker_data->tid;
     AMRInput* input = worker_data->input;
-    Count start     = starts[tid];
-    Count end       = starts[tid+1];
+    Count     start = worker_data->tid * (input->N / worker_data->num_threads);
+    Count     end   = (worker_data->tid == worker_data->num_threads - 1)
+        ? input->N
+        : (worker_data->tid + 1) * (input->N / worker_data->num_threads);
 
     float affect_rate  = worker_data->affect_rate;
     DSV*  updated_vals = worker_data->updated_vals;

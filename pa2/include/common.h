@@ -76,7 +76,7 @@ typedef struct AMRMaxMin {
  */
 static inline AMRMaxMin getMaxMin(AMRInput* input) {
     AMRMaxMin result = { input->vals[0], input->vals[0] };
-    for (int i = 1; i < input->N; ++i) {
+    for (Count i = 1; i < input->N; ++i) {
         DSV val = input->vals[i];
         if (val > result.max) {
             result.max = val;

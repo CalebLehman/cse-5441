@@ -13,13 +13,13 @@ C_FLAGS     = -O3 \
 			  -Wextra \
 			  -Wshadow \
 			  -pedantic
-DEBUG_FLAGS = -DDEBUG -g
+DEBUG_FLAGS = -g
 LD_FLAGS    = -lrt -pthread
 
 OBJECTS = $(BUILD_DIR)/common.o
 HEADERS = $(INCLUDE_DIR)/amr.h \
           $(INCLUDE_DIR)/common.h
-TARGETS = disposable persistent
+TARGETS = disposable persistent disposable_equal_boxes persistent_equal_boxes
 
 
 all: $(TARGETS)
@@ -33,8 +33,14 @@ make_build:
 disposable: make_build $(BUILD_DIR)/lehman_caleb_disposable.o $(OBJECTS) $(HEADERS)
 	$(C_COMPILER) $(C_FLAGS) -o $@ $(BUILD_DIR)/lehman_caleb_disposable.o $(OBJECTS) $(LD_FLAGS)
 
+disposable_equal_boxes: make_build $(BUILD_DIR)/lehman_caleb_equal_boxes_disposable.o $(OBJECTS) $(HEADERS)
+	$(C_COMPILER) $(C_FLAGS) -o $@ $(BUILD_DIR)/lehman_caleb_equal_boxes_disposable.o $(OBJECTS) $(LD_FLAGS)
+
 persistent: make_build $(BUILD_DIR)/lehman_caleb_persistent.o $(OBJECTS) $(HEADERS)
 	$(C_COMPILER) $(C_FLAGS) -o $@ $(BUILD_DIR)/lehman_caleb_persistent.o $(OBJECTS) $(LD_FLAGS)
+
+persistent_equal_boxes: make_build $(BUILD_DIR)/lehman_caleb_equal_boxes_persistent.o $(OBJECTS) $(HEADERS)
+	$(C_COMPILER) $(C_FLAGS) -o $@ $(BUILD_DIR)/lehman_caleb_equal_boxes_persistent.o $(OBJECTS) $(LD_FLAGS)
 
 .PHONY: report
 report: make_build $(SRC_DIR)/report.tex
