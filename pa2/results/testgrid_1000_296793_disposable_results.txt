@@ -1,0 +1,525 @@
+=> threads 1
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    215.000000
+=> clock-seconds   211.980000
+=> gettime-seconds 214.264386
+========================================
+
+
+real	3m34.688s
+user	3m29.837s
+sys	0m2.517s
+=> threads 2
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    94.000000
+=> clock-seconds   181.000000
+=> gettime-seconds 93.659530
+========================================
+
+
+real	1m34.096s
+user	2m58.658s
+sys	0m2.712s
+=> threads 3
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    69.000000
+=> clock-seconds   192.250000
+=> gettime-seconds 68.540068
+========================================
+
+
+real	1m8.951s
+user	3m8.947s
+sys	0m3.683s
+=> threads 4
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    50.000000
+=> clock-seconds   190.250000
+=> gettime-seconds 50.027875
+========================================
+
+
+real	0m50.442s
+user	3m6.421s
+sys	0m4.222s
+=> threads 5
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    41.000000
+=> clock-seconds   192.950000
+=> gettime-seconds 41.181898
+========================================
+
+
+real	0m41.587s
+user	3m7.184s
+sys	0m6.135s
+=> threads 6
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    36.000000
+=> clock-seconds   196.970000
+=> gettime-seconds 35.411399
+========================================
+
+
+real	0m35.822s
+user	3m11.126s
+sys	0m6.234s
+=> threads 7
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    32.000000
+=> clock-seconds   200.350000
+=> gettime-seconds 31.602413
+========================================
+
+
+real	0m32.004s
+user	3m13.184s
+sys	0m7.551s
+=> threads 8
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    29.000000
+=> clock-seconds   204.320000
+=> gettime-seconds 28.824927
+========================================
+
+
+real	0m29.265s
+user	3m14.746s
+sys	0m9.975s
+=> threads 9
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    26.000000
+=> clock-seconds   205.070000
+=> gettime-seconds 26.162855
+========================================
+
+
+real	0m26.557s
+user	3m19.518s
+sys	0m5.926s
+=> threads 10
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    25.000000
+=> clock-seconds   208.140000
+=> gettime-seconds 24.730017
+========================================
+
+
+real	0m25.146s
+user	3m12.660s
+sys	0m15.844s
+=> threads 12
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    22.000000
+=> clock-seconds   215.750000
+=> gettime-seconds 22.368392
+========================================
+
+
+real	0m22.760s
+user	3m18.977s
+sys	0m17.132s
+=> threads 14
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    20.000000
+=> clock-seconds   220.230000
+=> gettime-seconds 20.680971
+========================================
+
+
+real	0m21.078s
+user	3m22.042s
+sys	0m18.572s
+=> threads 16
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    20.000000
+=> clock-seconds   226.790000
+=> gettime-seconds 19.920542
+========================================
+
+
+real	0m20.320s
+user	3m28.742s
+sys	0m18.419s
+=> threads 18
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    20.000000
+=> clock-seconds   233.850000
+=> gettime-seconds 19.455337
+========================================
+
+
+real	0m19.850s
+user	3m36.157s
+sys	0m18.067s
+=> threads 20
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    20.000000
+=> clock-seconds   244.110000
+=> gettime-seconds 20.140257
+========================================
+
+
+real	0m20.531s
+user	3m40.052s
+sys	0m24.426s
+=> threads 22
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    21.000000
+=> clock-seconds   253.730000
+=> gettime-seconds 20.982911
+========================================
+
+
+real	0m21.381s
+user	3m45.393s
+sys	0m28.720s
+=> threads 24
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    23.000000
+=> clock-seconds   266.120000
+=> gettime-seconds 22.808438
+========================================
+
+
+real	0m23.202s
+user	3m52.921s
+sys	0m33.576s
+=> threads 26
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    25.000000
+=> clock-seconds   277.830000
+=> gettime-seconds 25.344111
+========================================
+
+
+real	0m25.731s
+user	3m57.683s
+sys	0m40.510s
+=> threads 28
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    27.000000
+=> clock-seconds   287.450000
+=> gettime-seconds 27.426799
+========================================
+
+
+real	0m27.862s
+user	4m5.355s
+sys	0m42.488s
+=> threads 30
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    29.000000
+=> clock-seconds   296.350000
+=> gettime-seconds 29.406961
+========================================
+
+
+real	0m29.796s
+user	4m8.992s
+sys	0m47.717s
+=> threads 32
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    32.000000
+=> clock-seconds   307.160000
+=> gettime-seconds 32.469772
+========================================
+
+
+real	0m32.867s
+user	4m13.579s
+sys	0m53.957s
+=> threads 34
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    35.000000
+=> clock-seconds   312.640000
+=> gettime-seconds 34.272327
+========================================
+
+
+real	0m34.661s
+user	4m14.479s
+sys	0m58.517s
+=> threads 36
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    36.000000
+=> clock-seconds   317.250000
+=> gettime-seconds 36.398550
+========================================
+
+
+real	0m36.795s
+user	4m19.434s
+sys	0m58.177s
+=> threads 38
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    39.000000
+=> clock-seconds   321.910000
+=> gettime-seconds 38.849994
+========================================
+
+
+real	0m39.268s
+user	4m19.054s
+sys	1m3.235s
+=> threads 40
+========================================
+params:
+=> affect_rate 0.900000
+=> epsilon     0.900000
+
+results:
+=> iterations 51684
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    53.000000
+=> clock-seconds   340.050000
+=> gettime-seconds 53.201987
+========================================
+
+
+real	0m53.599s
+user	4m24.154s
+sys	1m16.264s
