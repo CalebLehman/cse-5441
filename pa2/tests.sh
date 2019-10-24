@@ -21,24 +21,6 @@ run_tests() {
   echo "Finished tests with file ${test_file}"
 }
 
-process_results() {
-  local test_file="$1"
-
-  echo "Processing results from file ${test_file}..."
-  test_name=$(basename ${test_file})
-  results_files=
-  for prog in ${programs[@]}; do
-    results_files="${results_files} ${test_name}_${prog}_results.txt"
-  done
-  plt_out_file=${test_name}_results.png
-  echo "python process_results.py ${test_name} ${plt_out_file} ${results_files}"
-  for prog in ${programs[@]}; do
-    results_file=${test_name}_${prog}_results.txt
-    mv ${results_file} ${PBS_O_WORKDIR}/results/.
-  done
-  echo "mv ${plt_out_file} ${PBS_O_WORKDIR}/results/."
-}
-
 # Load modules
 module load intel
 module load python
@@ -58,5 +40,18 @@ mkdir -p ${PBS_O_WORKDIR}/results
 
 for test_file in ${test_files[@]}; do
   run_tests ${test_file}
-  process_results ${test_file}
 done
+
+results_files=
+test_names=
+for test_file in ${test_files[@]}; do
+  test_name=$(basename ${test_file})
+  test_names="${test_names} ${test_name}"
+  for prog in ${programs[@]}; do
+    results_file=${test_name}_${prog}_results.txt
+    results_files="${results_files} ${results_file}"
+  done
+done
+cd ${PBS_O_WORKDIR}
+plt_out_file=tests_results.png
+python process_results.py ${plt_out_file} results/ -t ${test_names} -p ${programs[@]}

@@ -21,28 +21,32 @@ def parse_results(stream):
 def plot_by_threads(results, dependent, plt_out_file):
     test_names = [test_name for test_name in results]
     programs = [program for program in results[test_names[0]]]
-    affect_rate = results[test_names[0]][programs[0]]['affect_rate']
-    epsilon     = results[test_names[0]][programs[0]]['epsilon']
 
-    plt.figure(figsize=(8*len(test_names), 8))
-    lines = ['o-r', '^-b']
+    scale = 7
+    plt.figure(figsize=(scale*len(test_names), scale))
+    lines = ['o-r', 'D-b', '+-g', 'x-r', 's-b']
     for t, test_name in enumerate(test_names):
+        affect_rate = results[test_name][programs[0]]['affect_rate'][0]
+        epsilon     = results[test_name][programs[0]]['epsilon'][0]
         ax = plt.subplot(1, len(test_names), t+1)
         for i, program in enumerate(programs):
             x = results[test_name][program]['threads']
             y = results[test_name][program][dependent]
-            ax.plot(x, y, lines[i % len(lines)])
-        ax.axhline(serial[test_name], color='g', ls='--')
+            ax.plot(x, y, lines[i % len(lines)], label=program)
+        ax.axhline(serial[test_name], color='g', ls='--', label='serial')
+        ax.set_title(
+              r'\texttt{' + test_name.replace('_', r'\textunderscore ') + r'}'
+            + ' '
+            + r'($\alpha=' + str(affect_rate) + '$'
+            + r', '
+            + r'$\varepsilon=' + str(epsilon) + '$)'
+            , fontsize=14
+        )
+        ax.set_xlabel(r'\# of Threads')
+        ax.set_ylabel(r'Runtime (seconds)')
+        ax.legend()
 
-    """
-    ax.set_xticks([round(x_val, 2) for x_val in sorted(set(x))])
-    ax.set_xlabel(r'$\varepsilon$', fontsize=20, labelpad=5)
-    ax.set_yticks([round(y_val, 2) for y_val in sorted(set(y))])
-    ax.set_ylabel(r'$\alpha$ (affect rate)', fontsize=16, labelpad=10)
-
-    cb.set_label(r'\texttt{clock\textunderscore gettime} (seconds)', labelpad=20, fontsize=14, rotation=270)
-    """
-    plt.title(r'AMR runtime for \texttt{' + test_name.replace('_', r'\textunderscore ') + '}', fontsize=16)
+    plt.tight_layout()
     plt.savefig(plt_out_file)
 
 if __name__ == '__main__':
