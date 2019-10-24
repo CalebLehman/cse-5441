@@ -11,7 +11,7 @@ run_tests() {
 
   # Run tests
   for prog in ${programs[@]}; do
-    results_file=$(basename ${test_file})_${prog}_results.txt
+    results_file=$(basename ${test_file})/${prog}
     for t in ${threads}; do
       echo "=> threads ${t}" | tee -a ${results_file}
       { time ./${prog} ${affect_rate} ${epsilon} ${t} <${test_file}; } 2>&1 | tee -a ${results_file}
@@ -39,7 +39,10 @@ make clean && make
 mkdir -p ${PBS_O_WORKDIR}/results
 
 for test_file in ${test_files[@]}; do
+  test_name=$(basename ${test_file})
+  mkdir ${test_name}
   run_tests ${test_file}
+  mkdir -p ${PBS_O_WORKDIR}/results/${test_name} && cp ${test_name}/. ${PBS_O_WORKDIR}/results/${test_name}
 done
 
 cd ${PBS_O_WORKDIR}
