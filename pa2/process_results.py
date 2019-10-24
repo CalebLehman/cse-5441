@@ -50,25 +50,18 @@ def plot_by_threads(results, dependent, plt_out_file):
     plt.savefig(plt_out_file)
 
 if __name__ == '__main__':
-    if len(sys.argv) < 7:
+    if len(sys.argv) != 3:
         print(f'Usage: {sys.argv[0]} [plt-file] [results-dir] -t [test-names] -p [programs]')
         print(f'plt-file   : name of output image file for plot')
         print(f'results-dir: directory containing output file from testing script')
-        print(f'test-names : names of tests')
-        print(f'programs   : one or more programs used to generate output')
         exit()
     plt_out_file = sys.argv[1]
     results_dir  = sys.argv[2]
 
-    assert sys.argv[3] == '-t', 'bad parameters'
-    test_names = []
-    pos = 4
-    while sys.argv[pos] != '-p':
-        test_names.append(sys.argv[pos])
-        pos += 1
+    results_files = os.listdir(results_dir)
 
-    assert sys.argv[pos] == '-p', 'bad parameters'
-    programs = sys.argv[pos+1:]
+    test_names = list(set(['_'.join(name.split('_')[:-2]) for name in results_files]))
+    programs   = list(set([name.split('_')[-2] for name in results_files]))
 
     results = dict([])
     for test_name in test_names:

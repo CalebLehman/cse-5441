@@ -25,15 +25,15 @@ run_tests() {
 module load intel
 module load python
 
+# Bring in configuration file
+# affect_rate, epsilon, programs, tests
+source ${PBS_O_WORKDIR}/tests.cfg
+
 # Move sources to TMPDIR and build
 cd ${TMPDIR}
 cp ${PBS_O_WORKDIR}/* . -rp
 
 make clean && make
-
-# Bring in configuration file
-# affect_rate, epsilon, programs, tests
-source tests.cfg
 
 # Run tests
 mkdir -p ${PBS_O_WORKDIR}/results
@@ -42,16 +42,5 @@ for test_file in ${test_files[@]}; do
   run_tests ${test_file}
 done
 
-results_files=
-test_names=
-for test_file in ${test_files[@]}; do
-  test_name=$(basename ${test_file})
-  test_names="${test_names} ${test_name}"
-  for prog in ${programs[@]}; do
-    results_file=${test_name}_${prog}_results.txt
-    results_files="${results_files} ${results_file}"
-  done
-done
 cd ${PBS_O_WORKDIR}
-plt_out_file=tests_results.png
-python process_results.py ${plt_out_file} results/ -t ${test_names} -p ${programs[@]}
+python process_results.py results/tests_results.png results/
