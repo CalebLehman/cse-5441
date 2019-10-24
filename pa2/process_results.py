@@ -40,10 +40,10 @@ def plot_by_threads(results, dependent, plt_out_file):
             + r'($\alpha=' + str(affect_rate) + '$'
             + r', '
             + r'$\varepsilon=' + str(epsilon) + '$)'
-            , fontsize=14
+            , fontsize=20
         )
-        ax.set_xlabel(r'\# of Threads')
-        ax.set_ylabel(r'Runtime (seconds)')
+        ax.set_xlabel(r'\# of Threads', fontsize=18)
+        ax.set_ylabel(r'Runtime (seconds)', fontsize=18)
         ax.legend()
 
     plt.tight_layout()
