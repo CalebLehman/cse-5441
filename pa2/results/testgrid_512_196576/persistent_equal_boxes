@@ -1,0 +1,102 @@
+=> threads 1
+========================================
+params:
+=> affect_rate 0.800000
+=> epsilon     0.800000
+
+results:
+=> iterations 63380
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    115.000000
+=> clock-seconds   114.400000
+=> gettime-seconds 114.668204
+========================================
+
+=> threads 2
+========================================
+params:
+=> affect_rate 0.800000
+=> epsilon     0.800000
+
+results:
+=> iterations 63380
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    65.000000
+=> clock-seconds   116.920000
+=> gettime-seconds 65.003764
+========================================
+
+=> threads 4
+========================================
+params:
+=> affect_rate 0.800000
+=> epsilon     0.800000
+
+results:
+=> iterations 63380
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    33.000000
+=> clock-seconds   114.570000
+=> gettime-seconds 32.944604
+========================================
+
+=> threads 8
+========================================
+params:
+=> affect_rate 0.800000
+=> epsilon     0.800000
+
+results:
+=> iterations 63380
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    20.000000
+=> clock-seconds   123.280000
+=> gettime-seconds 19.572142
+========================================
+
+=> threads 16
+========================================
+params:
+=> affect_rate 0.800000
+=> epsilon     0.800000
+
+results:
+=> iterations 63380
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    15.000000
+=> clock-seconds   136.560000
+=> gettime-seconds 15.211359
+========================================
+
+=> threads 32
+========================================
+params:
+=> affect_rate 0.800000
+=> epsilon     0.800000
+
+results:
+=> iterations 63380
+=> max-DSV    0.000000
+=> min-DSV    0.000000
+
+timing:
+=> time-seconds    19.000000
+=> clock-seconds   163.040000
+=> gettime-seconds 19.112071
+========================================
+
