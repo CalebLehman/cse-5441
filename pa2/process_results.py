@@ -32,7 +32,7 @@ def plot_by_threads(results, dependent, plt_out_file):
         for i, program in enumerate(programs):
             x = results[test_name][program]['threads']
             y = results[test_name][program][dependent]
-            ax.plot(x, y, lines[i % len(lines)], label=program)
+            ax.plot(x, y, lines[i % len(lines)], label=program.replace('_', r'\textunderscore '))
         ax.axhline(serial[test_name], color='g', ls='--', label='serial')
         ax.set_title(
               r'\texttt{' + test_name.replace('_', r'\textunderscore ') + r'}'
@@ -51,25 +51,23 @@ def plot_by_threads(results, dependent, plt_out_file):
 
 if __name__ == '__main__':
     if len(sys.argv) != 3:
-        print(f'Usage: {sys.argv[0]} [plt-file] [results-dir] -t [test-names] -p [programs]')
+        print(f'Usage: {sys.argv[0]} [plt-file] [results-dir]')
         print(f'plt-file   : name of output image file for plot')
         print(f'results-dir: directory containing output file from testing script')
         exit()
     plt_out_file = sys.argv[1]
     results_dir  = sys.argv[2]
 
-    results_files = os.listdir(results_dir)
-
-    test_names = list(set(['_'.join(name.split('_')[:-2]) for name in results_files]))
-    programs   = list(set([name.split('_')[-2] for name in results_files]))
-
+    test_names = [name for name in os.listdir(results_dir) if os.path.isdir(os.path.join(results_dir, name))]
     results = dict([])
     for test_name in test_names:
+        programs = [name for name in os.listdir(os.path.join(results_dir, test_name))]
         results[test_name] = dict([])
         for program in programs:
             results_file = os.path.join(
                 results_dir,
-                f'{test_name}_{program}_results.txt'
+                test_name,
+                program
             )
             with open(results_file, 'r') as stream:
                 results[test_name][program] = parse_results(stream)

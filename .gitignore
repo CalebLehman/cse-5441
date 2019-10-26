@@ -35,6 +35,8 @@
 amr
 disposable
 persistent
+disposable_equal_boxes
+persistent_equal_boxes
 *.exe
 *.out
 *.app
