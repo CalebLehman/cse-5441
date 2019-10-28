@@ -77,6 +77,11 @@ int main(int argc, char** argv) {
  * {@inheritDoc}
  */
 AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threads) {
+    if (num_threads >= input->N) {
+        printf("We require num threads to be less than num boxes\n");
+        exit(1);
+    }
+
     /**
      * Repeat until convergence
      */
