@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 serial = {
     'testgrid_400_12206': 261.09,
     'testgrid_1000_296793': 185.29,
+    'testgrid_512_196576': 115.93,
 }
 
 def parse_results(stream):
@@ -20,12 +21,12 @@ def parse_results(stream):
 
 def plot_by_threads(results, dependent, plt_out_file):
     test_names = [test_name for test_name in results]
-    programs = [program for program in results[test_names[0]]]
 
     scale = 7
     plt.figure(figsize=(scale*len(test_names), scale))
-    lines = ['o-r', 'D-b', '+-g', 'x-r', 's-b']
+    lines = ['o-r', 'o-b', 'x-r', 'x-b', 's-g']
     for t, test_name in enumerate(test_names):
+        programs = [program for program in results[test_name]]
         affect_rate = results[test_name][programs[0]]['affect_rate'][0]
         epsilon     = results[test_name][programs[0]]['epsilon'][0]
         ax = plt.subplot(1, len(test_names), t+1)

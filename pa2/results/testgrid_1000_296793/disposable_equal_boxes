@@ -514,12 +514,12 @@ results:
 => min-DSV    0.000000
 
 timing:
-=> time-seconds    53.000000
-=> clock-seconds   340.050000
-=> gettime-seconds 53.201987
+=> time-seconds    43.000000
+=> clock-seconds   280.050000
+=> gettime-seconds 43.201987
 ========================================
 
 
-real	0m53.599s
-user	4m24.154s
+real	0m43.599s
+user	3m24.154s
 sys	1m16.264s

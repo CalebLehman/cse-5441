@@ -40,24 +40,23 @@ Caleb Lehman \\
 \begin{document}
 \maketitle
 
-\section*{Overview}
-\label{sec:overview}
+\section*{Summary}
+\label{sec:summary}
 
 For this lab, I modified the previous serial \texttt{C} program to perform
 Adapetive Mesh Refinement (AMR)\footnote{See previous lab or project
 descriptions for details about AMR computation.} to work in parallel using the
-POSIX Threads (\texttt{pthreads}) library. I created two programs,
-\texttt{disposable} and \texttt{persistent}, which employ different strategies
-for thread creation and destruction (see \textbf{TODO} hyperref [] {}). I
-tested these programs on two test files with different numbers of therads to
+POSIX Threads (\texttt{pthreads}) library. I created 4 programs,
+\texttt{disposable}, \texttt{persistent}, \texttt{disposable\textunderscore equal\textunderscore boxes}, and
+\texttt{persistent\textunderscore equal\textunderscore boxes}, which employ different strategies for 1)
+thread creation and destruction and 2) distribution of boxes to threads. I
+tested these programs on 3 test files with different numbers of threads to
 compare performance against the serial version and against each other.
-
-\subsection*{Results Summary}
 \label{subsec:results-summary}
 
 As expected, the \emph{persistent threads} model outperformed the
 \emph{disposable threads} model, most likely due to less overhead from not
-destroying and recreating threads each iteration. Both parallel programs
+destroying and recreating threads each iteration. All parallel programs
 outperformed the serial version (at least for optimal choices of number of
 threads).
 
@@ -79,6 +78,13 @@ threads).
     was 2.9x faster than the serial program on the small test case and 10.9x
     faster on the large test case.
 
+    \item The different box-distribution strategies didn't make much of a
+    difference, so I created a third test case, \texttt{testgrid\textunderscore
+    512\textunderscore 196576} to emphasize disparities in the number of
+    neighbors handled by each thread. Even in this case, there wasn't much
+    difference (see the \hyperref[subsec:test_files]{Test Files} section for
+    small discussion on this).
+
 \end{itemize}
 
 I used all 4 timing methods from lab 1 to collect timing data. All the timing
@@ -88,12 +94,17 @@ gettime}. Of particular note is that the \texttt{clock} function from the
 reports CPU time, not wall time. As a result, it consistently returns a
 significantly longer time than the actual time the program took to run.
 
-See the \textbf{TODO} section for a more detailed discussion of the results.
-
 \newpage
 \section*{Pseudocodes}
 \label{sec:pseudocoes}
 
+This section contains rough pseudocodes for the (\texttt{*\textunderscore
+equal\textunderscore boxes} versions of the) required programs. The pseudocode
+for the main \texttt{disposable}/\texttt{persistent} programs is not listed,
+but is equivalent except for the computation of $range$ being slightly more
+involved in order to balance the number of neighbors handled by each thread.
+
+\vspace{-1em}
 \subsection*{\emph{Disposable Threads} Model}
 
 Given $\alpha$, $\varepsilon$, a description of grid-aligned boxes, initial
@@ -101,6 +112,7 @@ Domain Specific Values (DSV), and a number of threads, the rough pseudocode for
 my implementation following the \emph{disposable threads} model is as follows:
 
 \begin{algorithm}
+\small
 \begin{algorithmic}[1]
 \Procedure{Disposable}{$\alpha$, $\varepsilon$, $N$, $Boxes$, $Initial DSV$, $nthreads$}
 \State $DSV \gets Initial DSV$, $DSV' \gets Initial DSV$
@@ -126,6 +138,7 @@ To summarize, under this model, threads are created at the beginning of each
 iteration and execute updates in parallel. Then the threads are joined and
 destroyed and the updates are committed.
 
+\vspace{-1em}
 \subsection*{\emph{Persistent Threads} Model}
 
 Given $\alpha$, $\varepsilon$, a description of grid-aligned boxes, initial
@@ -133,6 +146,7 @@ Domain Specific Values (DSV), and a number of threads, the rough pseudocode for
 my implementation following the \emph{persistent threads} model is as follows:
 
 \begin{algorithm}
+\small
 \begin{algorithmic}[1]
 \Procedure{Persistent}{$\alpha$, $\varepsilon$, $N$, $Boxes$, $Initial DSV$, $nthreads$}
 \State $DSV \gets Initial DSV$, $DSV' \gets Initial DSV$
@@ -156,7 +170,7 @@ my implementation following the \emph{persistent threads} model is as follows:
 
 To summarize, under this model, threads are created at the beginning of the
 program and destroyed at the end. The threads run in parallel, updating each of
-their blocks of DSVs. The threads must be synchronized twice per iterations: 1)
+their blocks of DSVs. The threads are synchronized twice per iteration: 1)
 after computing the updates and 2) after commiting updates.
 
 \section*{Tests}
@@ -175,7 +189,7 @@ linked against the \texttt{librt} and \texttt{libpthread} libraries.
 
 For testing, I loaded the \texttt{python/3.6-conda5.2} module, which loads a
 python environment with the \texttt{NumPy}, \texttt{SciPy}, and
-\texttt{Matplotlib} packages, amoung others.
+\texttt{Matplotlib} packages, among others.
 
 \subsection*{Timing}
 \label{subsec:timing}
@@ -195,39 +209,115 @@ results in this report}.
 \subsection*{Test Files}
 \label{subsec:test_files}
 
-Dr. Jones provided the \texttt{testgrid\textunderscore 400\textunderscore 12206} test file.
-As part of lab 1, I reduced the $\alpha$ (affect rate) and $\epsilon$ parameters until the
-serial runtime increased into the 3 to 6 minute range. In particular, I selected $\alpha = 0.01$ and $\epsilon = 0.02$,
-for which the serial program completed in 261 seconds.
+Dr. Jones provided the \texttt{testgrid\textunderscore 400\textunderscore
+12206} test file.  As part of lab 1, I reduced the $\alpha$ (affect rate) and
+$\varepsilon$ parameters until the serial runtime increased into the 3 to 6
+minute range. In particular, I selected $\alpha = 0.01$ and $\varepsilon =
+0.02$, for which the serial program completed in 261 seconds.
 
 The above approach of changing the $\alpha$ and $\epsilon$ parameters allows us
 to make the programs run longer, but doesn't affect the actual length of each
-iteration. With only 12206 boxes, each iteration is fairly short \textbf{TODO},
-so it is expected the overhead of synchronizing threads would inhibit
-parallelizing beyond a small number of threads. In order to investigate this,
-I generated another test file, \texttt{testgrid\textunderscore 1000\textunderscore 12206}, \textbf{TODO}.
+iteration. With only 12206 boxes, each iteration is fairly short (on the order
+of $\frac{261\textrm{ sec}}{1589637} = 0.16\textrm{ms}$ per iteration), so it is
+expected the overhead of synchronizing threads would inhibit parallelizing
+beyond a small number of threads. In order to investigate this, I generated
+another test file, \texttt{testgrid\textunderscore 1000\textunderscore 296793},
+which has more boxes and therefore longer iterations.
+
+As mentioned above, in addition to the two required programs, I created two
+more with different distibutions of boxes to threads. I expected the programs
+which balanced the number of neighbors for which each thread was responsible
+(\texttt{disposable} and \texttt{persistent}) to outperform the programs which
+simply gave equally-sized, contiguous chunks of boxes to each thread the number
+of boxes (\texttt{*\textunderscore equal\textunderscore boxes}), since number of neighbors controls how much
+``work'' is done for each box. However, both programs performed similarly on
+the first two test files. I created a third test file
+\texttt{testgrid\textunderscore 512\textunderscore 196576}, in which
+different are areas of the grid have different average neighbors per box. Even on
+this specialized test case, there was no non-trivial performance difference.
+Reflecting on this comparison, I think attempting to optimize the number of
+neighbors handled by each thread is not too promising, since the overall
+average number of neighbors per box in a grid (actually for any planar graph)
+is always strictly $<6$, so the typical grid is not pathalogical enough for it
+to make a difference.
+
+Some summary statistics for the test files are presented below. Per submission
+instructions, I didn't include the test files with the code submission, but I
+can produce them if needed.
+
+\begin{table}[b]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        test & \texttt{\#} rows & \texttt{\#} cols & \texttt{\#} boxes & mean \texttt{\#} neighbors & std. dev. \texttt{\#} neighbors \\
+        \hline
+        \hline
+        \texttt{testgrid\textunderscore 400\textunderscore 12206} & 400 & 400 & 12206 & 5.89 & 1.55 \\
+        \texttt{testgrid\textunderscore 1000\textunderscore 296793} & 1000 & 1000 & 296793 & 4.79 & 1.57 \\
+        \texttt{testgrid\textunderscore 512\textunderscore 196576} & 512 & 640 & 196576 & 5.32 & 18.24 \\
+        \hline
+    \end{tabular}
+    
+    \caption{Basic statistics for my test files. Note that the file in the
+    second row was engineered to have many boxes and the file in the third row
+    was engineered to have high variance/std. dev.}
+
+\end{table}
 
 \newpage
 \section*{Results}
 \label{sec:results}
 
+The output for each test case was consistent across all variations and was as follows:
+\begin{itemize}
+    \item \texttt{testgrid\textunderscore 400\textunderscore 12206}: 1589637 iterations, $(max, min) = (0.085900, 0.084182)$
+    \item \texttt{testgrid\textunderscore 1000\textunderscore 296793}: 51684 iterations, $(max, min) = (0.000000, 0.000000)$
+    \item \texttt{testgrid\textunderscore 512\textunderscore 196576}: 63380 iterations, $(max, min) = (0.000000, 0.000000)$
+\end{itemize}
+
+The main timing results are shown in the figure below. I ran the programs for
+various amounts of threads between 1 and 40. Note that for the provided test
+file \texttt{testgrid\textunderscore 400\textunderscore 12206}, the optimal
+number of threads was around 6 for each program, while the optimal number of
+threads was around 20 for the larger test files that I created. This confirms
+that increasing the number of boxes, thereby increasing the (serial) length of
+each iteration provides more opportunities for parallelism. The iterations for
+the small test file are so short that the overheads associated with
+creating/destroying/synchronizing threads quickly becomes the bottleneck.
+
+Other notes are that \texttt{persistent} versions consistently outperformed
+\texttt{disposable} versions, as expected, and that my variations with how
+boxes were distributed had very little effect. Finally, the parallel versions
+of the program did outperform the serial version, except for the smallest test
+case, where, for large number of threads, the overheads outweighed the benefits
+of parallelism and the parallel programs actually performed worse.
+
+\vspace{3em}
 \begin{minipage}{\linewidth}
     \centering
-    \includegraphics[width=\linewidth]{../results/tests_results.png}
+    \includegraphics[width=\linewidth]{../results/plot.png}
+
     \captionof{figure}{The runtimes of the parallel versions of the program
     plotted against the number of threads used. Serial runtime is included for
-    comparison.}
+    comparison. Note that \texttt{persistent} consistently outperforms
+    \texttt{disposable} and that the \texttt{*\textunderscore
+    equal\textunderscore boxes} versions perform similarly to their
+    counterparts. Also note that \texttt{persistent} switches from \texttt{x}
+    markers to circle markers in the rightmost plot.}
+
     \label{fig:runtimes}
 \end{minipage}
 
+\newpage
 \section*{Project Usage}
 \label{sec:project}
 
 \subsection*{Building}
 \label{subsec:building}
 
-To build the \texttt{amr} executable, navigate to the top level of the
-submitted directory and build as follows:
+To build the required \texttt{disposable} and \texttt{persistent} executables
+(as well as the \texttt{*\textunderscore equal\textunderscore boxes}) variations, navigate to the top level
+of the submitted directory and build as follows:
 
 \begin{lstlisting}[style=DOS]
 # Ensure that you have icc compiler
@@ -235,7 +325,7 @@ submitted directory and build as follows:
 $ make
 ...
 $ ls
-... disposable persistent ...
+... disposable disposable_equal_boxes persistent persistent_equal_boxes ...
 \end{lstlisting}
 
 \subsection*{Running}
@@ -248,6 +338,6 @@ $ ./[program] [affect-rate] [epsilon] [num-threads] <[test-file]
 \end{lstlisting}
 
 where \texttt{program} is one of the built programs and \texttt{num-threads} is
-an positive integer number of threads.
+any positive integer number of threads.
 
 \end{document}

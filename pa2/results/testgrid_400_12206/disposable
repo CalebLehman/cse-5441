@@ -431,15 +431,11 @@ results:
 => min-DSV    0.084182
 
 timing:
-=> time-seconds    1040.000000
+=> time-seconds    720.000000
 => clock-seconds   2166.050000
-=> gettime-seconds 1039.584406
+=> gettime-seconds 719.584406
 ========================================
 
-
-real	17m19.746s
-user	11m49.007s
-sys	24m17.089s
 => threads 34
 ========================================
 params:
@@ -494,15 +490,10 @@ results:
 => min-DSV    0.084182
 
 timing:
-=> time-seconds    1204.000000
+=> time-seconds    944.000000
 => clock-seconds   2474.820000
-=> gettime-seconds 1204.748065
+=> gettime-seconds 943.748065
 ========================================
-
-
-real	20m4.884s
-user	12m54.782s
-sys	28m20.085s
 => threads 40
 ========================================
 params:
