@@ -30,7 +30,7 @@
 
 \title{
 CSE 5441 (Fall 2019, Dr. Jones)\\
-\large Serial AMR (Lab 1)
+\large \texttt{OpenMP} (Lab 3)
 }
 \author{
 Caleb Lehman \\
@@ -43,69 +43,17 @@ Caleb Lehman \\
 \section*{Overview}
 \label{sec:overview}
 
-For this lab, I prepared a (serial) \texttt{C} program to perform an
-Adaptive Mesh Refinement (AMR)\footnote{In this case, the \emph{mesh} is static,
-so the program may be more accurately described as a serial \emph{stencil
-code/computation.}}. The input to the problem is a tiling of a rectuangular
-grid composed of disjoint boxes along with their initial
-temperatures\footnote{While the values are specifically assumed to be temperatures,
-the setup is general enough to encompass any type of values. Throughout the
-report, I simply refer to them as ``Domain Specific Values'' (DSV).}. The
-program then iteratively updates the values in each box based on the current
-values of neighboring boxes. In addition to the inputs described above, two
-additional inputs are given: $\alpha$ (affect-rate), which determines the
-magnitude of the effect of neighboring boxes, and $\varepsilon$ (epsilon),
-which determines when convergence is reached and the program terminates.
+For this lab, I made slight modifications to my serial \texttt{C} program to
+perform Adaptive Mesh Refinement (AMR)\footnote{See lab 1 or project
+descriptions for details about AMR computation.} to work in parallel using the
+Intel implementation of the OpenMP API.  I created 2 programs,
+\texttt{disposable} and \texttt{persistent}, which mirror the disposable and
+persistent thread models used in the previous lab. In particular, the
+\texttt{disposable} code opens a new parallel region for each iteration, while
+the \texttt{persistent} code has a single parallel region encompassing the
+entire convergence loop, inside of which, each iteration is divided between the
+threads.
 
-\subsection*{Algorithm}
-\label{subsec:algorithm}
-
-Given $\alpha$, $\varepsilon$, a description of grid-aligned boxes, and initial
-Domain Specific Values (DSV), the rough pseudocode for my implementation is as
-follows:
-
-\begin{algorithm}
-\begin{algorithmic}[1]
-\Procedure{AMR}{$\alpha$, $\varepsilon$, $N$, $Boxes$, $Initial DSV$}
-\State $DSV \gets Initial DSV$
-\State $DSV' \gets Initial DSV$
-\While{$(\max{DSV} - \min{DSV})$ / $\max{DSV} > \varepsilon$} \label{alg:amr:convergence}
-    \For{$i < N$}
-        \State $DSV'[i] \gets (1 - \alpha)\cdot DSV[i] + \alpha \cdot \sum_{j\in nhbr} DSV[j]\cdot \Call{Overlap}{i, j, Boxes}$ \label{alg:amr:stencil}
-    \EndFor
-    \State $DSV \gets DSV'$ \label{alg:amr:commit}
-\EndWhile
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
-
-Note the use of the $\varepsilon$ (epsilon) parameter on
-line~\ref{alg:amr:convergence} to check for convergence and the use of the
-$\alpha$ (affect-rate) parameter on line~\ref{alg:amr:stencil} to weight the
-effect of neighboring boxes\footnote{Some boxes touch the edge of the grid, in
-which case they are assigned themselves as an additional neighbor. This is
-equivalent to assuming that the area outside the grid has the same DSV as the
-nearest box.}.  Updated DSV are commited on line~\ref{alg:amr:commit}. The
-particular implementation details can be found in the \texttt{common.c} and
-\texttt{amr.c} files, which contain the code for pre-processing the input and
-running the stencil code.
-
-\subsection*{Summary}
-\label{subsec:summary}
-
-\begin{itemize}
-
-    \item Runtimes increased when either parameter was decreased, as expected.
-
-    \item Selected parameters $\alpha=0.1$, $\varepsilon=0.2$, which yielded a
-    runtime of roughly 4 minutes to run with the
-    \texttt{testgrid\textunderscore 400\textunderscore 12206} file. Full timing
-    results with these parameters are presented in the
-    \hyperref[sec:results]{results section}.
-
-\end{itemize}
-
-\newpage
 \section*{Tests}
 \label{sec:tests}
 
@@ -128,83 +76,124 @@ of the program.
 \subsection*{Timing}
 \label{subsec:timing}
 
-The program was timed using several methods\footnote{Each method reports in
-different units/structues, all of which were converted seconds.}:
+I collected timing data using the same 4 methods as the first lab:
+\texttt{time}, \texttt{clock}, and \texttt{clock\textunderscore gettime} from
+the \texttt{"time.h"} header; and the \texttt{UNIX} utility \texttt{time}.
 
-\begin{itemize}
-    \item The \texttt{time} function declared in the \texttt{time.h} header
-    \item The \texttt{clock} function declared in the \texttt{time.h} header
-    \item The \texttt{clock\textunderscore gettime} function declared in the \texttt{time.h} header
-    \item The \texttt{UNIX} utility \texttt{time}
-\end{itemize}
+As with the second lab, I didn't use the results from the \texttt{clock} function from the
+\texttt{"time.h"} header, since it reports CPU time, not wall time. The other
+methods all returned values within 1 second of each other. The \texttt{time}
+function declared in \texttt{"time.h"} returns an integer number of seconds,
+but the other two methods return with sub-second precision.  \emph{For
+consistency, I used the \texttt{clock\textunderscore gettime} function for all
+results in this report}.
 
 \subsection*{Test Files}
 \label{subsec:test_files}
 
-Dr. Jones provided several files for testing purposes:
+Dr. Jones provided the \texttt{testgrid\textunderscore 400\textunderscore
+12206} test file.  As part of lab 1, I reduced the $\alpha$ (affect rate) and
+$\varepsilon$ parameters until the serial runtime increased into the 3 to 6
+minute range. In particular, I selected $\alpha = 0.01$ and $\varepsilon =
+0.02$, for which the serial program completed in 261 seconds.
 
-\begin{itemize}
-    \item \texttt{testgrid\textunderscore 50\textunderscore 78}: 50x50 grid with 78 boxes
-    \item \texttt{testgrid\textunderscore 50\textunderscore 201}: 50x50 grid with 201 boxes
-    \item \texttt{testgrid\textunderscore 200\textunderscore 1166}: 200x200 grid with 1166 boxes
-    \item \texttt{testgrid\textunderscore 400\textunderscore 1636}: 400x400 grid with 1636 boxes
-    \item \texttt{testgrid\textunderscore 400\textunderscore 12206}: 400x400 grid with 12206 boxes
-\end{itemize}
+The above approach of changing the $\alpha$ and $\epsilon$ parameters allows us
+to make the programs run longer, but doesn't affect the actual length of each
+iteration. With only 12206 boxes, each iteration is fairly short (on the order
+of $\frac{261\textrm{ sec}}{1589637} = 0.16\textrm{ms}$ per iteration), so it is
+expected the overhead of synchronizing threads would inhibit parallelizing
+beyond a small number of threads. In order to investigate this, I generated
+another test file, \texttt{testgrid\textunderscore 1000\textunderscore 296793},
+which has more boxes and therefore longer iterations.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        test & \texttt{\#} rows & \texttt{\#} cols & \texttt{\#} boxes & mean \texttt{\#} neighbors & std. dev. \texttt{\#} neighbors \\
+        \hline
+        \hline
+        \texttt{testgrid\textunderscore 400\textunderscore 12206} & 400 & 400 & 12206 & 5.89 & 1.55 \\
+        \texttt{testgrid\textunderscore 1000\textunderscore 296793} & 1000 & 1000 & 296793 & 4.79 & 1.57 \\
+        \hline
+    \end{tabular}
+    
+    \caption{Basic statistics for my test files. Note that the file in the
+    second row was engineered to have many boxes.}
+
+\end{table}
 
 \newpage
 \section*{Results}
 \label{sec:results}
 
-The first requirement of this project was to determine values for $\alpha$
-(affect-rate) and $\varepsilon$ (epsilon) such that the program converged in
-between 3 to 6 minutes when run on the \texttt{testgrid\textunderscore
-400\textunderscore 12206} test file. I ran a sweep over both parameters,
-capturing the runtimes reported by \texttt{clock\textunderscore gettime} (see
-Figure~\ref{fig:param_sweep}). As expected, the runtime increases when either
-of the parameters decrease.
+The output for each test case was consistent across all variations and was as follows:
+\begin{itemize}
+    \item \texttt{testgrid\textunderscore 400\textunderscore 12206}: 1589637 iterations, $(max, min) = (0.085900, 0.084182)$
+    \item \texttt{testgrid\textunderscore 1000\textunderscore 296793}: 51684 iterations, $(max, min) = (0.000000, 0.000000)$
+\end{itemize}
 
-I selected parameters $\alpha=0.1$, $\varepsilon=0.2$ and ran the program
-on each of the test files. The results are tabulated in Table~\ref{tab:runtime}.
-In particular, the program took roughly 4 minutes, 21 seconds to run on the
-\texttt{testgrid\textunderscore 400\textunderscore 12206} file.
+The relevant runtimes for the serial, \texttt{pthreads}, and \texttt{OpenMP}
+versions on each of the two test cases are plotted in the figure below. Note
+that the \texttt{OpenMP} \texttt{persistent} and \texttt{disposable} versions
+perform nearly identically. This suggests that (at least this \texttt{Intel}
+implementation of) \texttt{OpenMP} uses some sort of thread pool that creates
+the threads early in the program and doesn't destroy them until the end, simply
+assigning threads at the beginning of each parallel section.
 
+For the smaller test case, \texttt{OpenMP} outperformed \texttt{pthreads}, both
+yielding consistently lower runtimes, as well as scaling better (improved performance
+up to 12 threads). I suspect this has to do with how optimized the threading
+mechanisms are for their various tasks. In particular, in the \texttt{pthreads}
+implementation, I had to manually write to code to create and destroy threads,
+as well as create, pass, and collect the structures/paramaters passed to the
+threads. While this certainly provides more flexibility that then basic
+\texttt{OpenMP} \texttt{pragma} directives, which are limited by comparison,
+the corresponding operations in the \texttt{OpenMP} implementation are almost
+certainly highly optimized. In this smaller test case, each iteration is
+relatively short, so the overhead from basic thread management most likely is
+significant for the overall runtime.
+
+For the larger test case on the other hand, each iteration is longer, so the
+basic thread management overhead is less impactful compared to actual
+parallelization of the work.  In this case, \texttt{OpenMP} was outperformed by
+the \texttt{persistent} version of the \texttt{pthreads} program. One
+explanation for this is that my use of \texttt{pthreads} was specifically
+targetted at this particular problem, while the \texttt{OpenMP} directives are
+more general (by design) and therefore may not be as well-suited for this
+specific computation.
+
+\vspace{1em}
 \begin{minipage}{\linewidth}
     \centering
-    \begin{minipage}{0.4\linewidth}
+    \includegraphics[width=.8\linewidth]{../results/plot.png}
 
-            \includegraphics[width=\linewidth]{../results/testgrid_400_12206_results.png}
+    \captionof{figure}{The runtimes of the parallel versions (\texttt{pthreads}
+    and \texttt{OpenMP}) of the program plotted against the number of threads
+    used. Serial runtime is included for comparison. Note that \texttt{OpenMP}
+    \texttt{persistent} and \texttt{disposable} versions consistently perform
+    nearly identically.}
 
-            \captionof{figure}{The runtime of the \texttt{amr} program on the
-            \texttt{testgrid\textunderscore 400\textunderscore 12206} test file
-            for various values of $\alpha$, $\varepsilon$.}
-            \label{fig:param_sweep}
-
-    \end{minipage}
-    \hspace{0.02\linewidth}
-    \begin{minipage}{0.45\linewidth}
-        \centering
-        \begin{tabular}{|l|c|c|c|c|}
-            \hline
-            \multicolumn{1}{|c|}{\multirow{2}{*}{Test file}} & \multicolumn{3}{|c|}{\texttt{\#include <time.h>}} & \texttt{UNIX} \\
-            \cline{2-5}
-            \multicolumn{1}{|c|}{} & \texttt{time} & \texttt{clock} & \texttt{gettime} & \texttt{time} \\
-            \hline
-            \hline
-            \texttt{50,78}     & 0.00 & 0.01 & 0.02 & 0.07 \\
-            \texttt{50,201}    & 0.00 & 0.07 & 0.08 & 0.12 \\
-            \texttt{200,1166}  & 3.00 & 2.95 & 2.96 & 3.01 \\
-            \texttt{400,1636}  & 7.00 & 7.12 & 7.13 & 7.18 \\
-            \texttt{400,12206} & 261.00 & 260.47 & 261.09 & 261.18 \\
-            \hline
-        \end{tabular}
-
-        \captionof{table}{Runtimes (seconds) for each of the test files using
-        parameters $\alpha=0.1$, $\varepsilon=0.2$. Test file names are
-        abbrviated from \texttt{testgrid\textunderscore n\textunderscore m} to
-        \texttt{n,m}.} \label{tab:runtime}
-
-    \end{minipage}
+    \label{fig:runtimes}
 \end{minipage}
+
+It is worth noting that the \texttt{OpenMP} parallelization was much less
+intrusive compared to the \texttt{pthreads} parallelization. The
+\texttt{persistent} version required a few \texttt{pragma} directives and some
+code to compute the workload division for each thread, but used much less new
+code than the corresponding \texttt{pthreads} version.  The \texttt{disposable}
+version required just 2-3 \texttt{pragma}s to parallelize and achieved just as
+good results as the \texttt{persistent} version. Furthermore, both versions
+compile\footnote{not including harmless warnings about unrecognized
+\texttt{pragma}s} and execute correctly as serial programs when compiled without
+\texttt{OpenMP}.
+
+Finally, since the \texttt{OpenMP} specifications don't have many strict
+requirements about using the exact number of threads requested in each
+parallel region, I included checks in both of the programs to verify that the
+number of threads was the same as the number requested. For all reasonable
+requests (between 1 and 40 threads on \texttt{Pitzer}), I never got an
+unexpected number of threads.
 
 \section*{Project Usage}
 \label{sec:project}
@@ -216,29 +205,15 @@ details, see the \texttt{README} included in the code submission.
 \subsection*{Building}
 \label{subsec:building}
 
-To build the \texttt{amr} executable, navigate to the top level of the
-submitted directory and build as follows:
+To build the \texttt{disposable} and \texttt{persistent} executables, navigate
+to the top level of the submitted directory and build as follows:
 
 \begin{lstlisting}[style=DOS]
 # Ensure that you have icc compiler
 
 $ make
-...
-$ ./amr
-Usage: amr [affect-rate] [epsilon]
-
-affect-rate: float value controlling the effect of neighboring boxes
-epislon    : float value determining the cutoff for convergence
-\end{lstlisting}
-
-To compile this report from source:
-
-\begin{lstlisting}[style=DOS]
-# Ensure that you have pdflatex compiler
-# and that the results/ directory has
-# the necessary plots for the report
-
-$ make report
+$ ls
+... persistent disposable ...
 \end{lstlisting}
 
 \subsection*{Running}
@@ -247,7 +222,9 @@ $ make report
 The syntax to run the program is:
 
 \begin{lstlisting}[style=DOS]
-$ ./amr [affect-rate] [epsilon] <[test-file]
+$ ./[program] [affect-rate] [epsilon] [num-threads] <[test-file]
 \end{lstlisting}
+where \texttt{program} is one of \texttt{persistent}, \texttt{disposable}
+and \texttt{num-threads} is positive integer number of threads.
 
 \end{document}

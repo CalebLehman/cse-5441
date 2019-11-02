@@ -77,18 +77,16 @@ int main(int argc, char** argv) {
  * {@inheritDoc}
  */
 AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threads) {
+    if (num_threads >= input->N) {
+        printf("We require num threads to be less than num boxes\n");
+        exit(1);
+    }
+
     /**
      * Repeat until convergence
      */
     AMRMaxMin max_min = getMaxMin(input);
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
-
-    /**
-     * updated_vals and input->vals are swapped during
-     * execution, need to remember originals for clean up
-     */
-    DSV* orig_vals         = input->vals;
-    DSV* orig_updated_vals = updated_vals;
 
     unsigned long total_iters = 0;
     #pragma omp parallel num_threads(num_threads)
@@ -99,9 +97,12 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
             printf("Unable to create %d threads (created %d)\n", num_threads, omp_get_num_threads());
             exit(1);
         }
+        Count tid = omp_get_thread_num();
+        #else
+        Count tid = 0;
+        num_threads = 1;
         #endif
 
-        int tid = omp_get_thread_num();
         Count start = tid * (input->N / num_threads);
         Count end   = (tid == num_threads - 1)
             ? input->N
@@ -112,13 +113,13 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
             /**
              * For each box
              */
-            for (int i = start; i < end; ++i) {
+            for (Count i = start; i < end; ++i) {
                 BoxData* box = &input->boxes[i];
                 /**
                  * Compute updated DSV
                  */
                 updated_vals[i] = box->self_overlap * input->vals[i];
-                for (int nhbr = 0; nhbr < box->num_nhbrs; ++nhbr) {
+                for (Count nhbr = 0; nhbr < box->num_nhbrs; ++nhbr) {
                     updated_vals[i] += box->overlaps[nhbr] * input->vals[box->nhbr_ids[nhbr]];
                 }
                 updated_vals[i] /= box->perimeter;
@@ -141,7 +142,6 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
             }
         }
     }
-
     free(updated_vals);
 
     AMROutput result;

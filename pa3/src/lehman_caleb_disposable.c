@@ -77,18 +77,16 @@ int main(int argc, char** argv) {
  * {@inheritDoc}
  */
 AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threads) {
+    if (num_threads >= input->N) {
+        printf("We require num threads to be less than num boxes\n");
+        exit(1);
+    }
+
     /**
      * Repeat until convergence
      */
     AMRMaxMin max_min = getMaxMin(input);
     DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
-
-    /**
-     * updated_vals and input->vals are swapped during
-     * execution, need to remember originals for clean up
-     */
-    DSV* orig_vals         = input->vals;
-    DSV* orig_updated_vals = updated_vals;
 
     unsigned long iter;
     for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
@@ -106,13 +104,13 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
             #endif
 
             #pragma omp for schedule(static)
-            for (int i = 0; i < input->N; ++i) {
+            for (Count i = 0; i < input->N; ++i) {
                 BoxData* box = &input->boxes[i];
                 /**
                  * Compute updated DSV
                  */
                 updated_vals[i] = box->self_overlap * input->vals[i];
-                for (int nhbr = 0; nhbr < box->num_nhbrs; ++nhbr) {
+                for (Count nhbr = 0; nhbr < box->num_nhbrs; ++nhbr) {
                     updated_vals[i] += box->overlaps[nhbr] * input->vals[box->nhbr_ids[nhbr]];
                 }
                 updated_vals[i] /= box->perimeter;
@@ -129,10 +127,6 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon, Count num_threa
         updated_vals = temp;
     }
 
-    /*
-    input->vals = orig_vals;
-    free(orig_updated_vals);
-    */
     free(updated_vals);
 
     AMROutput result;

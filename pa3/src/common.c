@@ -59,14 +59,13 @@ AMRInput* parseInput() {
     /**
      * Reading in per-box information
      */
-    for (int i = 0; i < input->N; ++i) {
+    for (Count i = 0; i < input->N; ++i) {
         BoxInput* box_input = &bs[i];
 
         /**
          * Verify that ids are sequential
          */
         Count id;
-        #ifdef DEBUG
         if (scanf(COUNT_SPEC, &id) != 1) {
             fprintf(stderr, "%s", invalid_format);
             exit(1);
@@ -75,9 +74,6 @@ AMRInput* parseInput() {
             fprintf(stderr, "%s", invalid_format);
             exit(1);
         }
-        #else
-        int rv = scanf(COUNT_SPEC, &id);
-        #endif
 
         /**
          * Size and position information
@@ -108,7 +104,7 @@ AMRInput* parseInput() {
             box_input->nhbr_ids[dir]  = malloc(
                 num_nhbrs * sizeof(*box_input->nhbr_ids[dir])
             );
-            for (int nhbr = 0; nhbr < num_nhbrs; ++nhbr) {
+            for (Count nhbr = 0; nhbr < num_nhbrs; ++nhbr) {
                 if (scanf(COUNT_SPEC, &box_input->nhbr_ids[dir][nhbr]) != 1) {
                     fprintf(stderr, "%s", invalid_format);
                     exit(1);
@@ -130,7 +126,7 @@ AMRInput* parseInput() {
      * to a more convenient format (to be stored in {@code boxes}).
      */
     input->boxes = malloc(input->N * sizeof(*input->boxes));
-    for (int i = 0; i < input->N; ++i) {
+    for (Count i = 0; i < input->N; ++i) {
         BoxData*  box_data  = &input->boxes[i];
         BoxInput* box_input = &bs[i];
 
@@ -151,7 +147,7 @@ AMRInput* parseInput() {
         
         box_data->self_overlap = box_data->perimeter;
         Count total_nhbr = 0;
-        for (int nhbr = 0;
+        for (Count nhbr = 0;
              nhbr < box_input->num_nhbrs[TOP];
              ++nhbr, ++total_nhbr
         ) {
@@ -162,7 +158,7 @@ AMRInput* parseInput() {
             box_data->overlaps[total_nhbr] = x_max - x_min;
             box_data->self_overlap -= x_max - x_min;
         }
-        for (int nhbr = 0;
+        for (Count nhbr = 0;
              nhbr < box_input->num_nhbrs[BOTTOM];
              ++nhbr, ++total_nhbr
         ) {
@@ -173,7 +169,7 @@ AMRInput* parseInput() {
             box_data->overlaps[total_nhbr] = x_max - x_min;
             box_data->self_overlap -= x_max - x_min;
         }
-        for (int nhbr = 0;
+        for (Count nhbr = 0;
              nhbr < box_input->num_nhbrs[LEFT];
              ++nhbr, ++total_nhbr
         ) {
@@ -184,7 +180,7 @@ AMRInput* parseInput() {
             box_data->overlaps[total_nhbr] = y_max - y_min;
             box_data->self_overlap -= y_max - y_min;
         }
-        for (int nhbr = 0;
+        for (Count nhbr = 0;
              nhbr < box_input->num_nhbrs[RIGHT];
              ++nhbr, ++total_nhbr
         ) {
@@ -200,7 +196,7 @@ AMRInput* parseInput() {
     /**
      * Clean up
      */
-    for (int i = 0; i < input->N; ++i) {
+    for (Count i = 0; i < input->N; ++i) {
         BoxInput* box_input = &bs[i];
         for (DIRECTION dir = TOP; dir <= RIGHT; ++dir) {
             free(box_input->nhbr_ids[dir]);
@@ -215,7 +211,7 @@ AMRInput* parseInput() {
  * {@inheritDoc}
  */
 void destroyInput(AMRInput* input) {
-    for (int i = 0; i < input->N; ++i) {
+    for (Count i = 0; i < input->N; ++i) {
         free(input->boxes[i].nhbr_ids);
         free(input->boxes[i].overlaps);
     }

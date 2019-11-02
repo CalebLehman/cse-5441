@@ -76,7 +76,7 @@ typedef struct AMRMaxMin {
  */
 static inline AMRMaxMin getMaxMin(AMRInput* input) {
     AMRMaxMin result = { input->vals[0], input->vals[0] };
-    for (int i = 1; i < input->N; ++i) {
+    for (Count i = 1; i < input->N; ++i) {
         DSV val = input->vals[i];
         if (val > result.max) {
             result.max = val;
@@ -125,10 +125,3 @@ static inline int min(int a, int b) { return a < b ? a : b; }
  * Helper function for computing the maximum of ints
  */
 static inline int max(int a, int b) { return a > b ? a : b; }
-
-static void printDSVs(Count N, DSV* vals) {
-    for (int i = 0; i < N; ++i) {
-        printf(DSV_SPEC" ", vals[i]);
-    }
-    printf("\n");
-}
