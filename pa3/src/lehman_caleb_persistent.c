@@ -7,7 +7,7 @@
 #include "common.h"
 
 const char* usage = "\
-Usage: disposable [affect-rate] [epsilon] [num-threads]\n\
+Usage: persistent [affect-rate] [epsilon] [num-threads]\n\
 \n\
 affect-rate: float value controlling the effect of neighboring boxes\n\
 epsilon    : float value determining the cutoff for convergence\n\
