@@ -28,7 +28,7 @@
     basicstyle=\scriptsize\color{black}\ttfamily
 }
 
-\title{
+\title{\vspace{-2em}
 CSE 5441 (Fall 2019, Dr. Jones)\\
 \large \texttt{OpenMP} (Lab 3)
 }
@@ -48,7 +48,7 @@ perform Adaptive Mesh Refinement (AMR)\footnote{See lab 1 or project
 descriptions for details about AMR computation.} to work in parallel using the
 Intel implementation of the OpenMP API.  I created 2 programs,
 \texttt{disposable} and \texttt{persistent}, which mirror the disposable and
-persistent thread models used in the previous lab. In particular, the
+persistent threads models used in the previous lab. In particular, the
 \texttt{disposable} code opens a new parallel region for each iteration, while
 the \texttt{persistent} code has a single parallel region encompassing the
 entire convergence loop, inside of which, each iteration is divided between the
@@ -78,15 +78,15 @@ of the program.
 
 I collected timing data using the same 4 methods as the first lab:
 \texttt{time}, \texttt{clock}, and \texttt{clock\textunderscore gettime} from
-the \texttt{"time.h"} header; and the \texttt{UNIX} utility \texttt{time}.
+the \texttt{"time.h"} header, and the \texttt{UNIX} utility \texttt{time}.
 
-As with the second lab, I didn't use the results from the \texttt{clock} function from the
-\texttt{"time.h"} header, since it reports CPU time, not wall time. The other
-methods all returned values within 1 second of each other. The \texttt{time}
-function declared in \texttt{"time.h"} returns an integer number of seconds,
-but the other two methods return with sub-second precision.  \emph{For
-consistency, I used the \texttt{clock\textunderscore gettime} function for all
-results in this report}.
+As with the second lab, I didn't use the results from the \texttt{clock}
+function from the \texttt{"time.h"} header, since it reports CPU time, not wall
+time. The other methods all returned values within 1 second of each other. The
+\texttt{time} function declared in \texttt{"time.h"} returns an integer number
+of seconds, but the other two methods return with sub-second precision.
+\emph{For consistency, I used the \texttt{clock\textunderscore gettime}
+function for all results in this report}.
 
 \subsection*{Test Files}
 \label{subsec:test_files}
@@ -100,11 +100,13 @@ minute range. In particular, I selected $\alpha = 0.01$ and $\varepsilon =
 The above approach of changing the $\alpha$ and $\epsilon$ parameters allows us
 to make the programs run longer, but doesn't affect the actual length of each
 iteration. With only 12206 boxes, each iteration is fairly short (on the order
-of $\frac{261\textrm{ sec}}{1589637} = 0.16\textrm{ms}$ per iteration), so it is
+of $\frac{261\textrm{ sec}}{1589637} = 0.16\textrm{ms}$ per iteration), so I
 expected the overhead of synchronizing threads would inhibit parallelizing
 beyond a small number of threads. In order to investigate this, I generated
 another test file, \texttt{testgrid\textunderscore 1000\textunderscore 296793},
-which has more boxes and therefore longer iterations.
+which has more boxes and therefore longer iterations. I used values of
+$(\alpha=0.9, \varepsilon=0.9)$ for this test case, since they produced a
+serial runtime of around 3 minutes.
 
 \begin{table}[h]
     \centering
@@ -118,8 +120,7 @@ which has more boxes and therefore longer iterations.
         \hline
     \end{tabular}
     
-    \caption{Basic statistics for my test files. Note that the file in the
-    second row was engineered to have many boxes.}
+    \caption{Basic statistics for the test files.}
 
 \end{table}
 
@@ -127,7 +128,7 @@ which has more boxes and therefore longer iterations.
 \section*{Results}
 \label{sec:results}
 
-The output for each test case was consistent across all variations and was as follows:
+The output for each test case was consistent across all programs and was as follows:
 \begin{itemize}
     \item \texttt{testgrid\textunderscore 400\textunderscore 12206}: 1589637 iterations, $(max, min) = (0.085900, 0.084182)$
     \item \texttt{testgrid\textunderscore 1000\textunderscore 296793}: 51684 iterations, $(max, min) = (0.000000, 0.000000)$
@@ -142,17 +143,17 @@ the threads early in the program and doesn't destroy them until the end, simply
 assigning threads at the beginning of each parallel section.
 
 For the smaller test case, \texttt{OpenMP} outperformed \texttt{pthreads}, both
-yielding consistently lower runtimes, as well as scaling better (improved performance
-up to 12 threads). I suspect this has to do with how optimized the threading
-mechanisms are for their various tasks. In particular, in the \texttt{pthreads}
-implementation, I had to manually write to code to create and destroy threads,
-as well as create, pass, and collect the structures/paramaters passed to the
-threads. While this certainly provides more flexibility that then basic
-\texttt{OpenMP} \texttt{pragma} directives, which are limited by comparison,
-the corresponding operations in the \texttt{OpenMP} implementation are almost
-certainly highly optimized. In this smaller test case, each iteration is
-relatively short, so the overhead from basic thread management most likely is
-significant for the overall runtime.
+yielding consistently lower runtimes, as well as scaling better (improved
+performance up to 12 threads). I suspect this has to do with how optimized the
+threading mechanisms are for their various tasks. In particular, in the
+\texttt{pthreads} implementation, I had to manually write to code to create and
+destroy threads, as well as create, pass, and collect the structures/paramaters
+passed to the threads. While this certainly provides more flexibility that then
+basic \texttt{OpenMP} \texttt{pragma} directives, which are limited by
+comparison, the corresponding operations in the \texttt{OpenMP} implementation
+are almost certainly highly optimized. In this smaller test case, each
+iteration is relatively short, so the overhead from basic thread management is
+probably significant for the overall runtime.
 
 For the larger test case on the other hand, each iteration is longer, so the
 basic thread management overhead is less impactful compared to actual
@@ -179,17 +180,17 @@ specific computation.
 
 It is worth noting that the \texttt{OpenMP} parallelization was much less
 intrusive compared to the \texttt{pthreads} parallelization. The
-\texttt{persistent} version required a few \texttt{pragma} directives and some
-code to compute the workload division for each thread, but used much less new
-code than the corresponding \texttt{pthreads} version.  The \texttt{disposable}
-version required just 2-3 \texttt{pragma}s to parallelize and achieved just as
-good results as the \texttt{persistent} version. Furthermore, both versions
-compile\footnote{not including harmless warnings about unrecognized
-\texttt{pragma}s} and execute correctly as serial programs when compiled without
-\texttt{OpenMP}.
+\texttt{persistent} \texttt{OpenMP} version required a few \texttt{pragma}
+directives and some code to compute the workload division for each thread, but
+used much less new code than the corresponding \texttt{pthreads} version.  The
+\texttt{disposable} \texttt{OpenMP} version required just 3-4 \texttt{pragma}s
+to parallelize and achieved just as good results as the \texttt{persistent}
+version. Furthermore, both versions compile\footnote{not including harmless
+warnings about unrecognized \texttt{pragma}s} and execute correctly as serial
+programs when compiled without \texttt{OpenMP}.
 
 Finally, since the \texttt{OpenMP} specifications don't have many strict
-requirements about using the exact number of threads requested in each
+requirements about creating the exact number of threads requested in each
 parallel region, I included checks in both of the programs to verify that the
 number of threads was the same as the number requested. For all reasonable
 requests (between 1 and 40 threads on \texttt{Pitzer}), I never got an
@@ -197,10 +198,6 @@ unexpected number of threads.
 
 \section*{Project Usage}
 \label{sec:project}
-
-This section details basic commands needed to build and run the project and is
-only applicable for the code submission corresponding to this report. For full
-details, see the \texttt{README} included in the code submission.
 
 \subsection*{Building}
 \label{subsec:building}
