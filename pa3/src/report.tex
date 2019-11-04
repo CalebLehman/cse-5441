@@ -144,16 +144,17 @@ assigning threads at the beginning of each parallel section.
 
 For the smaller test case, \texttt{OpenMP} outperformed \texttt{pthreads}, both
 yielding consistently lower runtimes, as well as scaling better (improved
-performance up to 12 threads). I suspect this has to do with how optimized the
-threading mechanisms are for their various tasks. In particular, in the
-\texttt{pthreads} implementation, I had to manually write to code to create and
-destroy threads, as well as create, pass, and collect the structures/paramaters
-passed to the threads. While this certainly provides more flexibility that then
-basic \texttt{OpenMP} \texttt{pragma} directives, which are limited by
-comparison, the corresponding operations in the \texttt{OpenMP} implementation
-are almost certainly highly optimized. In this smaller test case, each
-iteration is relatively short, so the overhead from basic thread management is
-probably significant for the overall runtime.
+performance up to 12 threads; 4.6x speed-up over serial version). I suspect
+this has to do with how optimized the threading mechanisms are for their
+various tasks. In particular, in the \texttt{pthreads} implementation, I had to
+manually write to code to create and destroy threads, as well as create, pass,
+and collect the structures/paramaters passed to the threads. While this
+certainly provides more flexibility that then basic \texttt{OpenMP}
+\texttt{pragma} directives, which are limited by comparison, the corresponding
+operations in the \texttt{OpenMP} implementation are almost certainly highly
+optimized. In this smaller test case, each iteration is relatively short, so
+the overhead from basic thread management is probably significant for the
+overall runtime.
 
 For the larger test case on the other hand, each iteration is longer, so the
 basic thread management overhead is less impactful compared to actual
