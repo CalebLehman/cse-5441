@@ -100,13 +100,13 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
     cudaMalloc((void**)&d_updated_vals, input->N * sizeof(*d_updated_vals));
     cudaMemcpy(d_current_vals, input->vals, input->N * sizeof(*d_current_vals), cudaMemcpyHostToDevice);
 
-    Count* d_iter;
+    unsigned long* d_iter;
     cudaMalloc((void**)&d_iter, sizeof(*d_iter));
 
     /**
      * Launch kernel
      */
-    int num_blocks    = 1;
+    int num_blocks    = 3;
     int num_thread_pb = 1;
     launch_kernel(affect_rate, epsilon, num_blocks, num_thread_pb, d_boxes, d_current_vals, d_updated_vals, input->N, d_iter);
 
