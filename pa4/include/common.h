@@ -74,10 +74,14 @@ typedef struct AMRMaxMin {
  * @param input pointer to populated {@code AMRInput} struct
  * @return struct with maximum and minimum DSV
  */
-static inline AMRMaxMin getMaxMin(AMRInput* input) {
-    AMRMaxMin result = { input->vals[0], input->vals[0] };
-    for (int i = 1; i < input->N; ++i) {
-        DSV val = input->vals[i];
+#ifndef __CUDA_ARCH__
+static inline AMRMaxMin getMaxMin(DSV* vals, Count N) {
+#else
+__device__ static inline AMRMaxMin getMaxMin(DSV* vals, Count N) {
+#endif
+    AMRMaxMin result = { vals[0], vals[0] };
+    for (int i = 1; i < N; ++i) {
+        DSV val = vals[i];
         if (val > result.max) {
             result.max = val;
         } else if (val < result.min) {

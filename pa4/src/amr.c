@@ -108,7 +108,7 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
      */
     int num_blocks    = 1;
     int num_thread_pb = 1;
-    launch_kernel(num_blocks, num_thread_pb, d_boxes, d_current_vals, d_updated_vals, input->N, d_iter);
+    launch_kernel(affect_rate, epsilon, num_blocks, num_thread_pb, d_boxes, d_current_vals, d_updated_vals, input->N, d_iter);
 
     /**
      * Retrieve results
@@ -117,7 +117,7 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
 
     cudaMemcpy(input->vals, d_current_vals, input->N * sizeof(*d_current_vals), cudaMemcpyDeviceToHost);
     cudaMemcpy(&(result.iterations), d_iter, sizeof(*d_iter), cudaMemcpyDeviceToHost);
-    AMRMaxMin max_min = getMaxMin(input);
+    AMRMaxMin max_min = getMaxMin(input->vals, input->N);
 
     result.max         = max_min.max;
     result.min         = max_min.min;
