@@ -15,6 +15,12 @@ void launch_kernel(
     unsigned long* h_iter
 );
 
+__global__ void maxMinKernel(
+    AMRMaxMin* max_min,
+    DSV* vals,
+    Count N
+);
+
 __global__ void kernel(
     float affect_rate,
     float epsilon,
