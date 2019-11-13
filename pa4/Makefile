@@ -22,12 +22,11 @@ CUDA_COMPILER = nvcc
 CUDA_FLAGS    = -O3
 
 OBJECTS = $(BUILD_DIR)/amr.o \
-          $(BUILD_DIR)/common.o \
-          $(BUILD_DIR)/kernel.co
+          $(BUILD_DIR)/common.o
 HEADERS = $(INCLUDE_DIR)/amr.h \
           $(INCLUDE_DIR)/common.h \
           $(INCLUDE_DIR)/kernel.h
-TARGETS = amr
+TARGETS = cuda-disposable cuda-persistent
 
 
 all: $(TARGETS)
@@ -38,8 +37,11 @@ debug: $(TARGETS)
 make_build:
 	mkdir -p $(BUILD_DIR)
 
-amr: make_build $(OBJECTS) $(HEADERS)
-	$(C_COMPILER) $(C_FLAGS) -o amr $(OBJECTS) $(OTHER_LIBS) $(LD_FLAGS)
+cuda-disposable: make_build $(BUILD_DIR)/kernel_disposable.co $(OBJECTS) $(HEADERS)
+	$(C_COMPILER) $(C_FLAGS) -o $@ $(BUILD_DIR)/kernel_disposable.co $(OBJECTS) $(OTHER_LIBS) $(LD_FLAGS)
+
+cuda-persistent: make_build $(BUILD_DIR)/kernel_persistent.co $(OBJECTS) $(HEADERS)
+	$(C_COMPILER) $(C_FLAGS) -o $@ $(BUILD_DIR)/kernel_persistent.co $(OBJECTS) $(OTHER_LIBS) $(LD_FLAGS)
 
 .PHONY: report
 report: make_build $(SRC_DIR)/report.tex

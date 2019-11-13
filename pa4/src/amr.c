@@ -106,8 +106,8 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
     /**
      * Launch kernel
      */
-    int num_blocks    = 3;
-    int num_thread_pb = 1;
+    int num_blocks    = 1;
+    int num_thread_pb = 512;
     launch_kernel(affect_rate, epsilon, num_blocks, num_thread_pb, d_boxes, d_current_vals, d_updated_vals, input->N, d_iter);
 
     /**
