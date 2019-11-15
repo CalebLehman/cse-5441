@@ -6,7 +6,7 @@
 #include "amr.h"
 #include "common.h"
 
-typedef enum tag {ar_tag, ep_tag, dsv_tag, pos_tag} tag;
+typedef enum tag {ar_tag, ep_tag, n_tag, dsv_tag, pos_tag} tag;
 
 const char* usage = "\
 Usage: amr [affect-rate] [epsilon]\n\
@@ -98,7 +98,16 @@ AMROutput run_master(AMRInput* input, float affect_rate, float epsilon) {
     for (int rank = 1; rank < size; ++rank) {
         MPI_Send(&affect_rate, 1, MPI_FLOAT, rank, ar_tag, MPI_COMM_WORLD);
         MPI_Send(&epsilon, 1, MPI_FLOAT, rank, ep_tag, MPI_COMM_WORLD);
+        MPI_Send(&input->N, 1, COUNT_MPI_TYPE, rank, n_tag, MPI_COMM_WORLD);
+
+        Count pos[2];
+        pos[0] = (rank-1) * (input->N / (size - 1));
+        pos[1] = (rank == size - 1)
+            ? input->N
+            : rank * (input->N / (size - 1));
+        MPI_Send(&pos[0], 2, COUNT_MPI_TYPE, rank, pos_tag, MPI_COMM_WORLD);
     }
+    MPI_Barrier(MPI_COMM_WORLD);
 
 
 
@@ -155,10 +164,24 @@ AMROutput run_master(AMRInput* input, float affect_rate, float epsilon) {
 }
 
 void run_computation() {
-    float affect_rate;
-    float epsilon;
     MPI_Status status;
+
+    float affect_rate;
     MPI_Recv(&affect_rate, 1, MPI_FLOAT, 0, ar_tag, MPI_COMM_WORLD, &status);
+
+    float epsilon;
     MPI_Recv(&epsilon, 1, MPI_FLOAT, 0, ep_tag, MPI_COMM_WORLD, &status);
-    printf("Got ar = %f and ep = %f\n", affect_rate, epsilon);
+
+    Count N;
+    MPI_Recv(&N, 1, COUNT_MPI_TYPE, 0, n_tag, MPI_COMM_WORLD, &status);
+    DSV* vals         = malloc(N * sizeof(*vals));
+    DSV* updated_vals = malloc(N * sizeof(*updated_vals));
+    Count pos[2];
+    MPI_Recv(&pos[0], 2, COUNT_MPI_TYPE, 0, pos_tag, MPI_COMM_WORLD, &status);
+    Count start = pos[0];
+    Count end   = pos[1];
+
+    printf("Got ar = %f and ep = %f and N = "COUNT_SPEC" and start = "COUNT_SPEC" and end = "COUNT_SPEC"\n", affect_rate, epsilon, N, start, end);
+
+    MPI_Barrier(MPI_COMM_WORLD);
 }
