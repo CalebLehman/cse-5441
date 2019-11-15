@@ -15,16 +15,22 @@ Usage: amr [affect-rate] [epsilon]\n\
 affect-rate: float value controlling the effect of neighboring boxes\n\
 epislon    : float value determining the cutoff for convergence\n";
 
+Count global_threads; // TODO
+Count global_blocks; // TODO
+
 int main(int argc, char** argv) {
     /**
      * Parse command-line arguments
      */
-    if (argc != 3) {
+    // if (argc != 3) { // TODO
+    if (argc != 5) { // TODO
         printf("%s", usage);
         exit(1);
     }
     float affect_rate = strtof(argv[1], NULL);
     float epsilon     = strtof(argv[2], NULL);
+    global_threads = strtol(argv[3], NULL, 10); // TODO
+    global_blocks = strtol(argv[4], NULL, 10); // TODO
 
     /**
      * Parse input data from standard input
@@ -107,7 +113,10 @@ AMROutput run(AMRInput* input, float affect_rate, float epsilon) {
      * Launch kernel
      */
     int num_blocks    = 1;
+    num_blocks = global_blocks; // TODO
     int num_thread_pb = 512;
+    num_thread_pb = global_threads; // TODO
+    printf("Using %d threads per each of %d blocks\n", num_thread_pb, num_blocks);
     launch_kernel(affect_rate, epsilon, num_blocks, num_thread_pb, d_boxes, d_current_vals, d_updated_vals, input->N, d_iter);
 
     /**

@@ -9,6 +9,9 @@ typedef double       DSV;
 #define COORD_SPEC "%u"
 #define DSV_SPEC "%lf"
 
+extern Count global_threads; // TODO
+extern Count global_blocks; // TODO
+
 typedef struct BoxData {
     Coord perimeter;
     Count id;

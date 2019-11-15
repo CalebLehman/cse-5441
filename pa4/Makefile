@@ -1,5 +1,5 @@
 # Makefile for building
-#   - amr executable
+#   - amr executables
 #   - lab report
 
 SRC_DIR     = ./src
