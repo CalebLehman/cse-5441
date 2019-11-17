@@ -11,8 +11,6 @@ extern "C" {
 void launch_kernel(
     float affect_rate,
     float epsilon,
-    int num_blocks,
-    int num_thread_pb,
     BoxData* boxes,
     DSV* current_vals,
     DSV* updated_vals,
@@ -22,8 +20,8 @@ void launch_kernel(
     dim3 temp_dim_grid(1);
     dim3 temp_dim_block(1);
 
-    dim3 dim_grid(num_blocks);
-    dim3 dim_block(num_thread_pb);
+    dim3 dim_grid(32);  // Hardcoded optimal values
+    dim3 dim_block(10);
 
     AMRMaxMin max_min;
     AMRMaxMin* d_max_min;

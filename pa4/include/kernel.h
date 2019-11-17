@@ -20,8 +20,6 @@ inline void gpuAssert(cudaError_t code, const char *file, int line) {
 void launch_kernel(
     float affect_rate,
     float epsilon,
-    int num_blocks,
-    int num_thread_pb,
     BoxData* boxes,
     DSV* current_vals,
     DSV* updated_vals,

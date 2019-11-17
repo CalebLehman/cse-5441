@@ -1,5 +1,6 @@
 
-Using 32 threads per each of 1 blocks
+=> threads 32 
+=> blocks 1
 ========================================
 params:
 => affect_rate 0.100000
@@ -20,7 +21,8 @@ timing:
 real	4m31.561s
 user	3m6.275s
 sys	1m25.286s
-Using 64 threads per each of 1 blocks
+=> threads 64 
+=> blocks 1
 ========================================
 params:
 => affect_rate 0.100000
@@ -41,7 +43,8 @@ timing:
 real	2m57.719s
 user	2m1.594s
 sys	0m56.079s
-Using 96 threads per each of 1 blocks
+=> threads 96 
+=> blocks 1
 ========================================
 params:
 => affect_rate 0.100000
@@ -62,7 +65,8 @@ timing:
 real	2m15.397s
 user	1m31.998s
 sys	0m43.357s
-Using 128 threads per each of 1 blocks
+=> threads 128 
+=> blocks 1
 ========================================
 params:
 => affect_rate 0.100000
@@ -83,7 +87,8 @@ timing:
 real	1m58.486s
 user	1m21.057s
 sys	0m37.401s
-Using 256 threads per each of 1 blocks
+=> threads 256 
+=> blocks 1
 ========================================
 params:
 => affect_rate 0.100000
@@ -104,7 +109,8 @@ timing:
 real	1m50.893s
 user	1m15.544s
 sys	0m35.339s
-Using 32 threads per each of 2 blocks
+=> threads 32 
+=> blocks 2
 ========================================
 params:
 => affect_rate 0.100000
@@ -125,7 +131,8 @@ timing:
 real	2m30.206s
 user	1m41.965s
 sys	0m48.230s
-Using 64 threads per each of 2 blocks
+=> threads 64 
+=> blocks 2
 ========================================
 params:
 => affect_rate 0.100000
@@ -146,7 +153,8 @@ timing:
 real	1m47.113s
 user	1m13.218s
 sys	0m33.812s
-Using 96 threads per each of 2 blocks
+=> threads 96 
+=> blocks 2
 ========================================
 params:
 => affect_rate 0.100000
@@ -167,7 +175,8 @@ timing:
 real	1m38.497s
 user	1m6.960s
 sys	0m31.517s
-Using 128 threads per each of 2 blocks
+=> threads 128 
+=> blocks 2
 ========================================
 params:
 => affect_rate 0.100000
@@ -188,7 +197,8 @@ timing:
 real	1m39.537s
 user	1m7.698s
 sys	0m31.805s
-Using 256 threads per each of 2 blocks
+=> threads 256 
+=> blocks 2
 ========================================
 params:
 => affect_rate 0.100000
@@ -209,7 +219,8 @@ timing:
 real	2m19.186s
 user	1m35.783s
 sys	0m43.406s
-Using 32 threads per each of 4 blocks
+=> threads 32 
+=> blocks 4
 ========================================
 params:
 => affect_rate 0.100000
@@ -230,7 +241,8 @@ timing:
 real	1m35.487s
 user	1m5.499s
 sys	0m29.974s
-Using 64 threads per each of 4 blocks
+=> threads 64 
+=> blocks 4
 ========================================
 params:
 => affect_rate 0.100000
@@ -251,7 +263,8 @@ timing:
 real	1m35.999s
 user	1m4.678s
 sys	0m31.278s
-Using 96 threads per each of 4 blocks
+=> threads 96 
+=> blocks 4
 ========================================
 params:
 => affect_rate 0.100000
@@ -272,7 +285,8 @@ timing:
 real	1m51.614s
 user	1m14.199s
 sys	0m37.352s
-Using 128 threads per each of 4 blocks
+=> threads 128 
+=> blocks 4
 ========================================
 params:
 => affect_rate 0.100000
@@ -293,7 +307,8 @@ timing:
 real	2m14.335s
 user	1m31.769s
 sys	0m42.529s
-Using 256 threads per each of 4 blocks
+=> threads 256 
+=> blocks 4
 ========================================
 params:
 => affect_rate 0.100000
@@ -314,7 +329,8 @@ timing:
 real	3m56.565s
 user	2m41.219s
 sys	1m15.380s
-Using 32 threads per each of 6 blocks
+=> threads 32 
+=> blocks 6
 ========================================
 params:
 => affect_rate 0.100000
@@ -335,7 +351,8 @@ timing:
 real	1m28.327s
 user	1m0.031s
 sys	0m28.180s
-Using 64 threads per each of 6 blocks
+=> threads 64 
+=> blocks 6
 ========================================
 params:
 => affect_rate 0.100000
@@ -356,7 +373,8 @@ timing:
 real	1m53.007s
 user	1m17.449s
 sys	0m35.546s
-Using 96 threads per each of 6 blocks
+=> threads 96 
+=> blocks 6
 ========================================
 params:
 => affect_rate 0.100000
@@ -377,7 +395,8 @@ timing:
 real	1m9.076s
 user	0m47.262s
 sys	0m21.727s
-Using 128 threads per each of 6 blocks
+=> threads 128 
+=> blocks 6
 ========================================
 params:
 => affect_rate 0.100000
@@ -398,7 +417,8 @@ timing:
 real	3m6.060s
 user	2m6.666s
 sys	0m59.309s
-Using 256 threads per each of 6 blocks
+=> threads 256 
+=> blocks 6
 ========================================
 params:
 => affect_rate 0.100000
@@ -419,7 +439,8 @@ timing:
 real	5m48.677s
 user	3m56.802s
 sys	1m51.849s
-Using 32 threads per each of 8 blocks
+=> threads 32 
+=> blocks 8
 ========================================
 params:
 => affect_rate 0.100000
@@ -440,7 +461,8 @@ timing:
 real	1m27.596s
 user	0m59.588s
 sys	0m27.937s
-Using 64 threads per each of 8 blocks
+=> threads 64 
+=> blocks 8
 ========================================
 params:
 => affect_rate 0.100000
@@ -461,7 +483,8 @@ timing:
 real	2m11.953s
 user	1m30.330s
 sys	0m41.577s
-Using 96 threads per each of 8 blocks
+=> threads 96 
+=> blocks 8
 ========================================
 params:
 => affect_rate 0.100000
@@ -482,7 +505,8 @@ timing:
 real	3m1.707s
 user	2m3.336s
 sys	0m58.367s
-Using 128 threads per each of 8 blocks
+=> threads 128 
+=> blocks 8
 ========================================
 params:
 => affect_rate 0.100000
@@ -503,7 +527,8 @@ timing:
 real	3m53.979s
 user	2m39.919s
 sys	1m14.097s
-Using 256 threads per each of 8 blocks
+=> threads 256 
+=> blocks 8
 ========================================
 params:
 => affect_rate 0.100000
@@ -524,7 +549,8 @@ timing:
 real	7m27.824s
 user	5m5.498s
 sys	2m21.899s
-Using 32 threads per each of 10 blocks
+=> threads 32 
+=> blocks 10
 ========================================
 params:
 => affect_rate 0.100000
@@ -545,7 +571,8 @@ timing:
 real	1m0.838s
 user	0m41.814s
 sys	0m18.944s
-Using 64 threads per each of 10 blocks
+=> threads 64 
+=> blocks 10
 ========================================
 params:
 => affect_rate 0.100000
@@ -566,7 +593,8 @@ timing:
 real	0m54.620s
 user	0m37.289s
 sys	0m17.312s
-Using 96 threads per each of 10 blocks
+=> threads 96 
+=> blocks 10
 ========================================
 params:
 => affect_rate 0.100000
@@ -587,7 +615,8 @@ timing:
 real	2m59.123s
 user	2m3.008s
 sys	0m56.116s
-Using 128 threads per each of 10 blocks
+=> threads 128 
+=> blocks 10
 ========================================
 params:
 => affect_rate 0.100000
@@ -608,7 +637,8 @@ timing:
 real	2m57.061s
 user	2m0.617s
 sys	0m56.463s
-Using 256 threads per each of 10 blocks
+=> threads 256 
+=> blocks 10
 ========================================
 params:
 => affect_rate 0.100000
@@ -629,7 +659,8 @@ timing:
 real	7m26.729s
 user	4m58.919s
 sys	2m27.844s
-Using 32 threads per each of 12 blocks
+=> threads 32 
+=> blocks 12
 ========================================
 params:
 => affect_rate 0.100000
@@ -650,7 +681,8 @@ timing:
 real	1m46.291s
 user	1m12.670s
 sys	0m33.602s
-Using 64 threads per each of 12 blocks
+=> threads 64 
+=> blocks 12
 ========================================
 params:
 => affect_rate 0.100000
@@ -671,7 +703,8 @@ timing:
 real	3m4.130s
 user	2m4.535s
 sys	0m59.594s
-Using 96 threads per each of 12 blocks
+=> threads 96 
+=> blocks 12
 ========================================
 params:
 => affect_rate 0.100000
@@ -692,7 +725,8 @@ timing:
 real	3m1.363s
 user	2m4.489s
 sys	0m56.884s
-Using 128 threads per each of 12 blocks
+=> threads 128 
+=> blocks 12
 ========================================
 params:
 => affect_rate 0.100000
@@ -713,7 +747,8 @@ timing:
 real	5m46.466s
 user	3m54.512s
 sys	1m51.980s
-Using 256 threads per each of 12 blocks
+=> threads 256 
+=> blocks 12
 ========================================
 params:
 => affect_rate 0.100000

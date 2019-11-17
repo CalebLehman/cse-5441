@@ -11,16 +11,14 @@ extern "C" {
 void launch_kernel(
     float affect_rate,
     float epsilon,
-    int num_blocks,
-    int num_thread_pb,
     BoxData* boxes,
     DSV* current_vals,
     DSV* updated_vals,
     Count N,
     unsigned long* h_iter
 ) {
-    dim3 dim_grid(num_blocks);
-    dim3 dim_block(num_thread_pb);
+    dim3 dim_grid(1);
+    dim3 dim_block(320);  // Hardcoded optimal value
     kernel<<<dim_grid,dim_block>>>(affect_rate, epsilon, boxes, current_vals, updated_vals, N, h_iter);
 }
 }
