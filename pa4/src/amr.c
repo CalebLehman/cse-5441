@@ -10,7 +10,7 @@
 #include "kernel.h"
 
 const char* usage = "\
-Usage: amr [affect-rate] [epsilon]\n\
+Usage: ./[program] [affect-rate] [epsilon]\n\
 \n\
 affect-rate: float value controlling the effect of neighboring boxes\n\
 epislon    : float value determining the cutoff for convergence\n";

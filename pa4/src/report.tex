@@ -125,7 +125,7 @@ the \texttt{cuda-disposable} version had optimal performance with 32 threads and
 Those values are now hardcoded into the program, as requested.
 With the optimal values for threads and blocks,
 \texttt{cuda-persistent} ran in 106 seconds and \texttt{cuda-disposable}
-ran in 60 seconds.
+ran in 54 seconds.
 
 The two biggest implications I see in this expirement are:
 \begin{itemize}
@@ -202,7 +202,7 @@ used the optimal times from each of the \texttt{CUDA} programs for this computat
 \cline{2-4}
 \multicolumn{1}{c|}{} & serial & \texttt{cuda-disposable} & \texttt{cuda-persistent} \\
 \hline
-GFlops & 1.166 & 0.272 & 0.154 \\
+GFlops & 1.166 & 0.302 & 0.154 \\
 \hline
 \end{tabular}
 \end{center}
