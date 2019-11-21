@@ -6,7 +6,7 @@
 #include "amr.h"
 #include "common.h"
 
-typedef enum tag {ar_tag, ep_tag, n_tag, dsv_tag, pos_tag} tag;
+typedef enum tag {ar_tag, ep_tag, n_tag, dsv_tag, pos_tag, run_tag} tag;
 
 const char* usage = "\
 Usage: amr [affect-rate] [epsilon]\n\
@@ -95,64 +95,56 @@ AMROutput run_master(AMRInput* input, float affect_rate, float epsilon) {
      */
     int size;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+    Count* starts = malloc((size - 1) * sizeof(*starts));
+    Count* ends   = malloc((size - 1) * sizeof(*ends));
     for (int rank = 1; rank < size; ++rank) {
         MPI_Send(&affect_rate, 1, MPI_FLOAT, rank, ar_tag, MPI_COMM_WORLD);
         MPI_Send(&epsilon, 1, MPI_FLOAT, rank, ep_tag, MPI_COMM_WORLD);
         MPI_Send(&input->N, 1, COUNT_MPI_TYPE, rank, n_tag, MPI_COMM_WORLD);
 
-        Count pos[2];
-        pos[0] = (rank-1) * (input->N / (size - 1));
-        pos[1] = (rank == size - 1)
+        starts[rank - 1] = (rank-1) * (input->N / (size - 1));
+        ends  [rank - 1] = (rank == size - 1)
             ? input->N
             : rank * (input->N / (size - 1));
+
+        Count pos[2] = { starts[rank - 1], ends[rank - 1] };
         MPI_Send(&pos[0], 2, COUNT_MPI_TYPE, rank, pos_tag, MPI_COMM_WORLD);
     }
+    // TODO
     MPI_Barrier(MPI_COMM_WORLD);
 
-
-
-    DSV* updated_vals = malloc(input->N * sizeof(*updated_vals));
-
-    /**
-     * updated_vals and input->vals are swapped during
-     * execution, need to remember originals for clean up
-     */
-    DSV* orig_vals         = input->vals;
-    DSV* orig_updated_vals = updated_vals;
-
-    unsigned long iter;
+    unsigned long iter = 0; // TODO
+#if 0 // TODO
     for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
-        #if (PRINT_DSVS != 0)
-        printf("BEGIN ITERATION %lu\n", iter + 1);
-        printDSVs(input->N, input->vals);
-        #endif
         /**
-         * For each box
+         * Send vals to processes
          */
-        for (int i = 0; i < input->N; ++i) {
-            BoxData* box = &input->boxes[i];
-            /**
-             * Compute updated DSV
-             */
-            updated_vals[i] = box->self_overlap * input->vals[i];
-            for (int nhbr = 0; nhbr < box->num_nhbrs; ++nhbr) {
-                updated_vals[i] += box->overlaps[nhbr] * input->vals[box->nhbr_ids[nhbr]];
-            }
-            updated_vals[i] /= box->perimeter;
-            updated_vals[i] = input->vals[i] * (1 - affect_rate)
-                + updated_vals[i] * affect_rate;
+        int running = 1;
+        for (int rank = 1; rank < size; ++rank) {
+            MPI_Send(&running, 1, MPI_INT, rank, run_tag, MPI_COMM_WORLD);
+            Count start = starts[rank - 1];
+            Count end   = ends  [rank - 1];
+            MPI_Send(&input->vals[start], end - start, DSV_MPI_TYPE, rank, dsv_tag, MPI_COMM_WORLD);
         }
 
         /**
-         * Commit updated DSVs
+         * Receive vals from processes
          */
-        DSV* temp = input->vals;
-        input->vals = updated_vals;
-        updated_vals = temp;
+        for (int rank = 1; rank < size; ++rank) {
+            MPI_Status status;
+            Count start = starts[rank - 1];
+            Count end   = ends  [rank - 1];
+            MPI_Recv(&input->vals[start], end - start, DSV_MPI_TYPE, rank, dsv_tag, MPI_COMM_WORLD, &status);
+        }
     }
+    int running = 0;
+    for (int rank = 1; rank < size; ++rank) {
+        MPI_Send(&running, 1, MPI_INT, rank, run_tag, MPI_COMM_WORLD);
+    }
+#endif
 
-    input->vals = orig_vals;
-    free(orig_updated_vals);
+    free(starts);
+    free(ends);
 
     AMROutput result;
     result.affect_rate = affect_rate;
@@ -181,7 +173,48 @@ void run_computation() {
     Count start = pos[0];
     Count end   = pos[1];
 
+    // TODO
     printf("Got ar = %f and ep = %f and N = "COUNT_SPEC" and start = "COUNT_SPEC" and end = "COUNT_SPEC"\n", affect_rate, epsilon, N, start, end);
 
+    // TODO
     MPI_Barrier(MPI_COMM_WORLD);
+    return;
+
+#if 0 // TODO
+    int running;
+    MPI_Recv(&running, 1, MPI_INT, 0, run_tag, MPI_COMM_WORLD, &status);
+    while (running == 1) {
+        /**
+         * Receive current vals
+         */
+        MPI_Recv(&vals[start], end - start, DSV_MPI_TYPE, 0, dsv_tag, MPI_COMM_WORLD, &status);
+
+        // TODO
+        /**
+         * Compute updated vals
+         */
+        for (int i = start; i < end; ++i) {
+            BoxData* box = &input->boxes[i];
+            /**
+             * Compute updated DSV
+             */
+            updated_vals[i] = box->self_overlap * input->vals[i];
+            for (int nhbr = 0; nhbr < box->num_nhbrs; ++nhbr) {
+                updated_vals[i] += box->overlaps[nhbr] * input->vals[box->nhbr_ids[nhbr]];
+            }
+            updated_vals[i] /= box->perimeter;
+            updated_vals[i] = input->vals[i] * (1 - affect_rate)
+                + updated_vals[i] * affect_rate;
+        }
+
+        /**
+         * Send back
+         */
+        MPI_Send(&vals[start], end - start, DSV_MPI_TYPE, 0, dsv_tag, MPI_COMM_WORLD);
+
+        MPI_Recv(&running, 1, MPI_INT, 0, run_tag, MPI_COMM_WORLD, &status);
+    }
+
+    return;
+#endif
 }
