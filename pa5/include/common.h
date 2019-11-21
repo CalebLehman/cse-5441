@@ -12,25 +12,6 @@ typedef double       DSV;
 #define COORD_MPI_TYPE MPI_UNSIGNED
 #define DSV_MPI_TYPE MPI_DOUBLE
 
-typedef struct BoxData {
-    Coord perimeter;
-    Count id;
-
-    Count  num_nhbrs;
-    Count* nhbr_ids;
-    Coord* overlaps;
-    Coord  self_overlap;
-
-    /**
-     * Unnecessary, since boxes currently
-     * aren't adaptive
-     */
-    //Coord x;
-    //Coord y;
-    //Coord height;
-    //Coord width;
-} BoxData;
-
 typedef struct AMRInput {
     /**
      * General parameters:
@@ -45,7 +26,13 @@ typedef struct AMRInput {
     /**
      * Per-box data
      */
-    BoxData* boxes;
+    Coord*   perimeters;
+    Count*   num_nhbrs;
+    Count*   offsets;
+    Coord*   self_overlaps;
+    Count    total_nhbrs;
+    Count*   nhbr_ids;
+    Coord*   overlaps;
     DSV*     vals;
 } AMRInput;
 

@@ -59,6 +59,7 @@ AMRInput* parseInput() {
     /**
      * Reading in per-box information
      */
+    input->total_nhbrs = 0;
     for (int i = 0; i < input->N; ++i) {
         BoxInput* box_input = &bs[i];
 
@@ -114,6 +115,7 @@ AMRInput* parseInput() {
                     exit(1);
                 }
             }
+            input->total_nhbrs += num_nhbrs;
         }
 
         /**
@@ -129,71 +131,72 @@ AMRInput* parseInput() {
      * Processes box data (currently stored in {@code bs})
      * to a more convenient format (to be stored in {@code boxes}).
      */
-    input->boxes = malloc(input->N * sizeof(*input->boxes));
+    input->nhbr_ids = malloc(input->total_nhbrs * sizeof(*input->nhbr_ids));
+    input->overlaps = malloc(input->total_nhbrs * sizeof(*input->overlaps));
+
+    input->perimeters    = malloc(input->N * sizeof(*input->perimeters));
+    input->num_nhbrs     = malloc(input->N * sizeof(*input->num_nhbrs));
+    input->offsets       = malloc(input->N * sizeof(*input->offsets));
+    input->self_overlaps = malloc(input->N * sizeof(*input->self_overlaps));
+    Count offset = 0;
     for (int i = 0; i < input->N; ++i) {
-        BoxData*  box_data  = &input->boxes[i];
         BoxInput* box_input = &bs[i];
 
-        box_data->perimeter = box_input->perimeter;
-        box_data->id        = i;
+        input->perimeters[i] = box_input->perimeter;
 
-        box_data->num_nhbrs = 0;
+        input->num_nhbrs[i] = 0;
         for (DIRECTION dir = TOP; dir <= RIGHT; ++dir) {
-            box_data->num_nhbrs += box_input->num_nhbrs[dir];
+            input->num_nhbrs[i] += box_input->num_nhbrs[dir];
         }
 
-        box_data->nhbr_ids = malloc(
-            box_data->num_nhbrs * sizeof(*box_data->nhbr_ids)
-        );
-        box_data->overlaps = malloc(
-            box_data->num_nhbrs * sizeof(*box_data->overlaps)
-        );
+        input->offsets[i] = offset;
+        offset += input->num_nhbrs[i];
         
-        box_data->self_overlap = box_data->perimeter;
+        input->self_overlaps[i] = input->perimeters[i];
         Count total_nhbr = 0;
         for (int nhbr = 0;
              nhbr < box_input->num_nhbrs[TOP];
              ++nhbr, ++total_nhbr
         ) {
             Count nhbr_id = box_input->nhbr_ids[TOP][nhbr];
-            box_data->nhbr_ids[total_nhbr] = nhbr_id;
+            input->nhbr_ids[input->offsets[i] + total_nhbr] = nhbr_id;
             Coord x_max = min(box_input->x_max, bs[nhbr_id].x_max);
             Coord x_min = max(box_input->x_min, bs[nhbr_id].x_min);
-            box_data->overlaps[total_nhbr] = x_max - x_min;
-            box_data->self_overlap -= x_max - x_min;
+            input->overlaps[input->offsets[i] + total_nhbr] = x_max - x_min;
+            input->self_overlaps[i] -= x_max - x_min;
         }
         for (int nhbr = 0;
              nhbr < box_input->num_nhbrs[BOTTOM];
              ++nhbr, ++total_nhbr
         ) {
             Count nhbr_id = box_input->nhbr_ids[BOTTOM][nhbr];
-            box_data->nhbr_ids[total_nhbr] = nhbr_id;
+            input->nhbr_ids[input->offsets[i] + total_nhbr] = nhbr_id;
             Coord x_max = min(box_input->x_max, bs[nhbr_id].x_max);
             Coord x_min = max(box_input->x_min, bs[nhbr_id].x_min);
-            box_data->overlaps[total_nhbr] = x_max - x_min;
-            box_data->self_overlap -= x_max - x_min;
+            input->overlaps[input->offsets[i] + total_nhbr] = x_max - x_min;
+            input->self_overlaps[i] -= x_max - x_min;
         }
         for (int nhbr = 0;
              nhbr < box_input->num_nhbrs[LEFT];
              ++nhbr, ++total_nhbr
         ) {
             Count nhbr_id = box_input->nhbr_ids[LEFT][nhbr];
-            box_data->nhbr_ids[total_nhbr] = nhbr_id;
+            input->nhbr_ids[input->offsets[i] + total_nhbr] = nhbr_id;
             Coord y_max = min(box_input->y_max, bs[nhbr_id].y_max);
             Coord y_min = max(box_input->y_min, bs[nhbr_id].y_min);
-            box_data->overlaps[total_nhbr] = y_max - y_min;
-            box_data->self_overlap -= y_max - y_min;
+            input->overlaps[input->offsets[i] + total_nhbr] = y_max - y_min;
+            input->self_overlaps[i] -= y_max - y_min;
         }
         for (int nhbr = 0;
              nhbr < box_input->num_nhbrs[RIGHT];
              ++nhbr, ++total_nhbr
         ) {
             Count nhbr_id = box_input->nhbr_ids[RIGHT][nhbr];
-            box_data->nhbr_ids[total_nhbr] = nhbr_id;
+            input->nhbr_ids[input->offsets[i] + total_nhbr] = nhbr_id;
             Coord y_max = min(box_input->y_max, bs[nhbr_id].y_max);
             Coord y_min = max(box_input->y_min, bs[nhbr_id].y_min);
-            box_data->overlaps[total_nhbr] = y_max - y_min;
-            box_data->self_overlap -= y_max - y_min;
+            input->overlaps[input->offsets[i] + total_nhbr] = y_max - y_min;
+            input->self_overlaps[i] -= y_max - y_min;
         }
     }
 
@@ -215,11 +218,12 @@ AMRInput* parseInput() {
  * {@inheritDoc}
  */
 void destroyInput(AMRInput* input) {
-    for (int i = 0; i < input->N; ++i) {
-        free(input->boxes[i].nhbr_ids);
-        free(input->boxes[i].overlaps);
-    }
-    free(input->boxes);
+    free(input->perimeters);
+    free(input->num_nhbrs);
+    free(input->offsets);
+    free(input->self_overlaps);
+    free(input->nhbr_ids);
+    free(input->overlaps);
     free(input->vals);
     free(input);
 }

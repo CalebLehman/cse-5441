@@ -6,7 +6,21 @@
 #include "amr.h"
 #include "common.h"
 
-typedef enum tag {ar_tag, ep_tag, n_tag, dsv_tag, pos_tag, run_tag} tag;
+typedef enum tag {
+    ar_tag,
+    ep_tag,
+    n_tag,
+    perimeter_tag,
+    num_nhbrs_tag,
+    offsets_tag,
+    self_overlaps_tag,
+    total_nhbrs_tag,
+    nhbr_id_tag,
+    overlap_tag,
+    dsv_tag,
+    pos_tag,
+    run_tag
+} tag;
 
 const char* usage = "\
 Usage: amr [affect-rate] [epsilon]\n\
@@ -90,9 +104,6 @@ AMROutput run_master(AMRInput* input, float affect_rate, float epsilon) {
      */
     AMRMaxMin max_min = getMaxMin(input);
 
-    /**
-     * TODO
-     */
     int size;
     MPI_Comm_size(MPI_COMM_WORLD, &size);
     Count* starts = malloc((size - 1) * sizeof(*starts));
@@ -109,12 +120,20 @@ AMROutput run_master(AMRInput* input, float affect_rate, float epsilon) {
 
         Count pos[2] = { starts[rank - 1], ends[rank - 1] };
         MPI_Send(&pos[0], 2, COUNT_MPI_TYPE, rank, pos_tag, MPI_COMM_WORLD);
+
+        MPI_Send(&input->perimeters[0], input->N, COORD_MPI_TYPE, rank, perimeter_tag, MPI_COMM_WORLD);
+        MPI_Send(&input->num_nhbrs[0], input->N, COUNT_MPI_TYPE, rank, num_nhbrs_tag, MPI_COMM_WORLD);
+        MPI_Send(&input->offsets[0], input->N, COUNT_MPI_TYPE, rank, offsets_tag, MPI_COMM_WORLD);
+        MPI_Send(&input->self_overlaps[0], input->N, COORD_MPI_TYPE, rank, self_overlaps_tag, MPI_COMM_WORLD);
+
+        MPI_Send(&input->total_nhbrs, 1, COUNT_MPI_TYPE, rank, total_nhbrs_tag, MPI_COMM_WORLD);
+        MPI_Send(&input->nhbr_ids[0], input->total_nhbrs, COUNT_MPI_TYPE, rank, nhbr_id_tag, MPI_COMM_WORLD);
+        MPI_Send(&input->overlaps[0], input->total_nhbrs, COORD_MPI_TYPE, rank, overlap_tag, MPI_COMM_WORLD);
     }
     // TODO
-    MPI_Barrier(MPI_COMM_WORLD);
+    //MPI_Barrier(MPI_COMM_WORLD);
 
-    unsigned long iter = 0; // TODO
-#if 0 // TODO
+    unsigned long iter;
     for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
         /**
          * Send vals to processes
@@ -122,9 +141,7 @@ AMROutput run_master(AMRInput* input, float affect_rate, float epsilon) {
         int running = 1;
         for (int rank = 1; rank < size; ++rank) {
             MPI_Send(&running, 1, MPI_INT, rank, run_tag, MPI_COMM_WORLD);
-            Count start = starts[rank - 1];
-            Count end   = ends  [rank - 1];
-            MPI_Send(&input->vals[start], end - start, DSV_MPI_TYPE, rank, dsv_tag, MPI_COMM_WORLD);
+            MPI_Send(&input->vals[0], input->N, DSV_MPI_TYPE, rank, dsv_tag, MPI_COMM_WORLD);
         }
 
         /**
@@ -141,7 +158,6 @@ AMROutput run_master(AMRInput* input, float affect_rate, float epsilon) {
     for (int rank = 1; rank < size; ++rank) {
         MPI_Send(&running, 1, MPI_INT, rank, run_tag, MPI_COMM_WORLD);
     }
-#endif
 
     free(starts);
     free(ends);
@@ -173,48 +189,56 @@ void run_computation() {
     Count start = pos[0];
     Count end   = pos[1];
 
-    // TODO
-    printf("Got ar = %f and ep = %f and N = "COUNT_SPEC" and start = "COUNT_SPEC" and end = "COUNT_SPEC"\n", affect_rate, epsilon, N, start, end);
+    Coord* perimeters    = malloc(N * sizeof(*perimeters));
+    Count* num_nhbrs     = malloc(N * sizeof(*num_nhbrs));
+    Count* offsets       = malloc(N * sizeof(*offsets));
+    Count* self_overlaps = malloc(N * sizeof(*self_overlaps));
+    MPI_Recv(&perimeters[0], N, COORD_MPI_TYPE, 0, perimeter_tag, MPI_COMM_WORLD, &status);
+    MPI_Recv(&num_nhbrs[0], N, COUNT_MPI_TYPE, 0, num_nhbrs_tag, MPI_COMM_WORLD, &status);
+    MPI_Recv(&offsets[0], N, COUNT_MPI_TYPE, 0, offsets_tag, MPI_COMM_WORLD, &status);
+    MPI_Recv(&self_overlaps[0], N, COORD_MPI_TYPE, 0, self_overlaps_tag, MPI_COMM_WORLD, &status);
+
+    Count total_nhbrs;
+    MPI_Recv(&total_nhbrs, 1, COUNT_MPI_TYPE, 0, total_nhbrs_tag, MPI_COMM_WORLD, &status);
+    Count* nhbr_ids = malloc(total_nhbrs * sizeof(*nhbr_ids));
+    Coord* overlaps = malloc(total_nhbrs * sizeof(*overlaps));
+    MPI_Recv(&nhbr_ids[0], total_nhbrs, COUNT_MPI_TYPE, 0, nhbr_id_tag, MPI_COMM_WORLD, &status);
+    MPI_Recv(&overlaps[0], total_nhbrs, COORD_MPI_TYPE, 0, overlap_tag, MPI_COMM_WORLD, &status);
 
     // TODO
-    MPI_Barrier(MPI_COMM_WORLD);
-    return;
+    // MPI_Barrier(MPI_COMM_WORLD);
 
-#if 0 // TODO
     int running;
     MPI_Recv(&running, 1, MPI_INT, 0, run_tag, MPI_COMM_WORLD, &status);
     while (running == 1) {
         /**
          * Receive current vals
          */
-        MPI_Recv(&vals[start], end - start, DSV_MPI_TYPE, 0, dsv_tag, MPI_COMM_WORLD, &status);
+        MPI_Recv(&vals[0], N, DSV_MPI_TYPE, 0, dsv_tag, MPI_COMM_WORLD, &status);
 
-        // TODO
         /**
          * Compute updated vals
          */
         for (int i = start; i < end; ++i) {
-            BoxData* box = &input->boxes[i];
             /**
              * Compute updated DSV
              */
-            updated_vals[i] = box->self_overlap * input->vals[i];
-            for (int nhbr = 0; nhbr < box->num_nhbrs; ++nhbr) {
-                updated_vals[i] += box->overlaps[nhbr] * input->vals[box->nhbr_ids[nhbr]];
+            updated_vals[i] = self_overlaps[i] * vals[i];
+            for (int nhbr = 0; nhbr < num_nhbrs[i]; ++nhbr) {
+                updated_vals[i] += overlaps[offsets[i] + nhbr] * vals[nhbr_ids[offsets[i] + nhbr]];
             }
-            updated_vals[i] /= box->perimeter;
-            updated_vals[i] = input->vals[i] * (1 - affect_rate)
+            updated_vals[i] /= perimeters[i];
+            updated_vals[i] = vals[i] * (1 - affect_rate)
                 + updated_vals[i] * affect_rate;
         }
 
         /**
          * Send back
          */
-        MPI_Send(&vals[start], end - start, DSV_MPI_TYPE, 0, dsv_tag, MPI_COMM_WORLD);
+        MPI_Send(&updated_vals[start], end - start, DSV_MPI_TYPE, 0, dsv_tag, MPI_COMM_WORLD);
 
         MPI_Recv(&running, 1, MPI_INT, 0, run_tag, MPI_COMM_WORLD, &status);
     }
 
     return;
-#endif
 }
