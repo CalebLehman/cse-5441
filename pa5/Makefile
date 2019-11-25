@@ -16,7 +16,7 @@ DEBUG_FLAGS = -g
 LD_FLAGS    = -lrt -qopenmp
 
 MPI_COMPILER = mpicc
-MPI_FLAGS    = $(C_FLAGS)
+MPI_FLAGS    = -cc=icc $(C_FLAGS)
 
 OBJECTS = $(BUILD_DIR)/common.o \
           $(BUILD_DIR)/amr.o

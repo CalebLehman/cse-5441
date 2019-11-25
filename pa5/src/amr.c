@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <mpi.h>
+#include <omp.h>
 
 #include "amr.h"
 #include "common.h"
@@ -23,10 +24,11 @@ typedef enum tag {
 } tag;
 
 const char* usage = "\
-Usage: amr [affect-rate] [epsilon]\n\
+Usage: amr [affect-rate] [epsilon] [test-file]\n\
 \n\
 affect-rate: float value controlling the effect of neighboring boxes\n\
-epislon    : float value determining the cutoff for convergence\n";
+epislon    : float value determining the cutoff for convergence\n\
+test-file  : test file with input to AMR problem\n";
 
 int main(int argc, char** argv) {
     MPI_Init(&argc, &argv);
@@ -39,17 +41,18 @@ int main(int argc, char** argv) {
         /**
          * Parse command-line arguments
          */
-        if (argc != 3) {
+        if (argc != 4) {
             printf("%s", usage);
             exit(1);
         }
         float affect_rate = strtof(argv[1], NULL);
         float epsilon     = strtof(argv[2], NULL);
+        char* test_file   = argv[3];
 
         /**
          * Parse input data from standard input
          */
-        AMRInput* input = parseInput();
+        AMRInput* input = parseInput(test_file);
 
         /**
          * Run and collect timing information
@@ -130,8 +133,6 @@ AMROutput run_master(AMRInput* input, float affect_rate, float epsilon) {
         MPI_Send(&input->nhbr_ids[0], input->total_nhbrs, COUNT_MPI_TYPE, rank, nhbr_id_tag, MPI_COMM_WORLD);
         MPI_Send(&input->overlaps[0], input->total_nhbrs, COORD_MPI_TYPE, rank, overlap_tag, MPI_COMM_WORLD);
     }
-    // TODO
-    //MPI_Barrier(MPI_COMM_WORLD);
 
     unsigned long iter;
     for (iter = 0; (max_min.max - max_min.min) / max_min.max > epsilon; ++iter, max_min = getMaxMin(input)) {
@@ -205,9 +206,6 @@ void run_computation() {
     MPI_Recv(&nhbr_ids[0], total_nhbrs, COUNT_MPI_TYPE, 0, nhbr_id_tag, MPI_COMM_WORLD, &status);
     MPI_Recv(&overlaps[0], total_nhbrs, COORD_MPI_TYPE, 0, overlap_tag, MPI_COMM_WORLD, &status);
 
-    // TODO
-    // MPI_Barrier(MPI_COMM_WORLD);
-
     int running;
     MPI_Recv(&running, 1, MPI_INT, 0, run_tag, MPI_COMM_WORLD, &status);
     while (running == 1) {
@@ -219,17 +217,21 @@ void run_computation() {
         /**
          * Compute updated vals
          */
-        for (int i = start; i < end; ++i) {
-            /**
-             * Compute updated DSV
-             */
-            updated_vals[i] = self_overlaps[i] * vals[i];
-            for (int nhbr = 0; nhbr < num_nhbrs[i]; ++nhbr) {
-                updated_vals[i] += overlaps[offsets[i] + nhbr] * vals[nhbr_ids[offsets[i] + nhbr]];
+        #pragma omp parallel
+        {
+            #pragma omp for schedule(static)
+            for (int i = start; i < end; ++i) {
+                /**
+                 * Compute updated DSV
+                 */
+                updated_vals[i] = self_overlaps[i] * vals[i];
+                for (int nhbr = 0; nhbr < num_nhbrs[i]; ++nhbr) {
+                    updated_vals[i] += overlaps[offsets[i] + nhbr] * vals[nhbr_ids[offsets[i] + nhbr]];
+                }
+                updated_vals[i] /= perimeters[i];
+                updated_vals[i] = vals[i] * (1 - affect_rate)
+                    + updated_vals[i] * affect_rate;
             }
-            updated_vals[i] /= perimeters[i];
-            updated_vals[i] = vals[i] * (1 - affect_rate)
-                + updated_vals[i] * affect_rate;
         }
 
         /**

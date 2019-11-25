@@ -28,7 +28,9 @@ typedef struct BoxInput {
 /**
  * {@inheritDoc}
  */
-AMRInput* parseInput() {
+AMRInput* parseInput(char* file_name) {
+    FILE* file = fopen(file_name, "r");
+
     /**
      * Allocate struct
      */
@@ -37,15 +39,15 @@ AMRInput* parseInput() {
     /**
      * Read in general parameters
      */
-    if (scanf(COUNT_SPEC, &input->N) != 1) {
+    if (fscanf(file, COUNT_SPEC, &input->N) != 1) {
         fprintf(stderr, "%s", invalid_format);
         exit(1);
     }
-    if (scanf(COORD_SPEC, &input->rows) != 1) {
+    if (fscanf(file, COORD_SPEC, &input->rows) != 1) {
         fprintf(stderr, "%s", invalid_format);
         exit(1);
     }
-    if (scanf(COORD_SPEC, &input->cols) != 1) {
+    if (fscanf(file, COORD_SPEC, &input->cols) != 1) {
         fprintf(stderr, "%s", invalid_format);
         exit(1);
     }
@@ -68,7 +70,7 @@ AMRInput* parseInput() {
          */
         Count id;
         #ifdef DEBUG
-        if (scanf(COUNT_SPEC, &id) != 1) {
+        if (fscanf(file, COUNT_SPEC, &id) != 1) {
             fprintf(stderr, "%s", invalid_format);
             exit(1);
         }
@@ -77,14 +79,14 @@ AMRInput* parseInput() {
             exit(1);
         }
         #else
-        int rv = scanf(COUNT_SPEC, &id);
+        int rv = fscanf(file, COUNT_SPEC, &id);
         #endif
 
         /**
          * Size and position information
          */
         Coord y, x, height, width;
-        if (scanf(COORD_SPEC COORD_SPEC COORD_SPEC COORD_SPEC,
+        if (fscanf(file, COORD_SPEC COORD_SPEC COORD_SPEC COORD_SPEC,
                   &y,        &x,        &height,   &width)
             != 4) {
             fprintf(stderr, "%s", invalid_format);
@@ -101,7 +103,7 @@ AMRInput* parseInput() {
          */
         for (DIRECTION dir = TOP; dir <= RIGHT; ++dir) {
             Count num_nhbrs;
-            if (scanf(COUNT_SPEC, &num_nhbrs) != 1) {
+            if (fscanf(file, COUNT_SPEC, &num_nhbrs) != 1) {
                 fprintf(stderr, "%s", invalid_format);
                 exit(1);
             }
@@ -110,7 +112,7 @@ AMRInput* parseInput() {
                 num_nhbrs * sizeof(*box_input->nhbr_ids[dir])
             );
             for (int nhbr = 0; nhbr < num_nhbrs; ++nhbr) {
-                if (scanf(COUNT_SPEC, &box_input->nhbr_ids[dir][nhbr]) != 1) {
+                if (fscanf(file, COUNT_SPEC, &box_input->nhbr_ids[dir][nhbr]) != 1) {
                     fprintf(stderr, "%s", invalid_format);
                     exit(1);
                 }
@@ -121,11 +123,12 @@ AMRInput* parseInput() {
         /**
          * DSV information
          */
-        if (scanf(DSV_SPEC, &input->vals[i]) != 1) {
+        if (fscanf(file, DSV_SPEC, &input->vals[i]) != 1) {
             fprintf(stderr, "%s", invalid_format);
             exit(1);
         }
     }
+    fclose(file);
 
     /**
      * Processes box data (currently stored in {@code bs})

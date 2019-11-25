@@ -1,0 +1,81 @@
+# SMALL TEST CASE
+
+## WITH ALL 5 NODES (4 worker processes)
+
+mpirun -genv OMP_NUM_THREADS 1 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+217.005839
+
+mpirun -genv OMP_NUM_THREADS 10 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+202.854319
+
+mpirun -genv OMP_NUM_THREADS 20 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+203.915147
+
+mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+207.617665
+
+mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+216.040542
+
+## WITH 2 NODES (1 worker process)
+
+mpirun -genv OMP_NUM_THREADS 1 -genv KMP_AFFINITY scatter -ppn 1 -n 2 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+334.641411
+
+mpirun -genv OMP_NUM_THREADS 10 -genv KMP_AFFINITY scatter -ppn 1 -n 2 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+107.485316
+
+mpirun -genv OMP_NUM_THREADS 20 -genv KMP_AFFINITY scatter -ppn 1 -n 2 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+100.063187
+
+mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 2 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+113.153867
+
+mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 2 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+
+116.704880
+
+
+# LARGE TEST CASE
+
+## WITH 5 NODES (4 worker processes)
+
+mpirun -genv OMP_NUM_THREADS 1 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .9 .9 tests/testgrid_1000_296793
+
+101.463520
+
+mpirun -genv OMP_NUM_THREADS 2 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .9 .9 tests/testgrid_1000_296793
+
+83.420850
+
+mpirun -genv OMP_NUM_THREADS 10 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .9 .9 tests/testgrid_1000_296793
+
+75.354518
+
+mpirun -genv OMP_NUM_THREADS 20 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .9 .9 tests/testgrid_1000_296793
+
+75.409590
+
+mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .9 .9 tests/testgrid_1000_296793
+
+77.657008
+
+mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .9 .9 tests/testgrid_1000_296793
+
+78.641712
+
+# ERRORS
+
+[mpiexec@p0017.ten.osc.edu] HYDT_bscd_pbs_wait_for_completion (tools/bootstrap/external/pbs_wait.c:67): tm_poll(obit_event) failed with TM error 17002
+[mpiexec@p0017.ten.osc.edu] HYDT_bsci_wait_for_completion (tools/bootstrap/src/bsci_wait.c:23): launcher returned error waiting for completion
+[mpiexec@p0017.ten.osc.edu] HYD_pmci_wait_for_completion (pm/pmiserv/pmiserv_pmci.c:218): launcher returned error waiting for completion
+[mpiexec@p0017.ten.osc.edu] main (ui/mpich/mpiexec.c:340): process manager error waiting for completion

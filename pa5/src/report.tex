@@ -1,0 +1,182 @@
+\documentclass{article}
+
+\usepackage{caption}
+
+\usepackage{multirow}
+
+\usepackage{graphicx}
+\setlength{\abovecaptionskip}{10pt plus 3pt minus 2pt}
+\setlength{\belowcaptionskip}{10pt plus 3pt minus 2pt}
+
+\usepackage[margin=1in]{geometry}
+
+\usepackage{hyperref}
+\hypersetup{
+    pdfborderstyle={/S/U/W 1},
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=cyan,
+}
+
+\usepackage{algorithm,algpseudocode}
+
+\usepackage{xcolor}
+\usepackage{listings}
+\lstdefinestyle{DOS}{
+    backgroundcolor=\color{lightgray},
+    basicstyle=\scriptsize\color{black}\ttfamily
+}
+
+\title{\vspace{-2em}
+CSE 5441 (Fall 2019, Dr. Jones)\\
+\large \texttt{MPI} + Hierarchical Parallelism (Lab 5)
+}
+\author{
+Caleb Lehman \\
+\href{mailto:lehman.346@osu.edu}{lehman.346@osu.edu}
+}
+
+\begin{document}
+\maketitle
+
+\section*{Overview}
+\label{sec:overview}
+
+For this lab, I parallelized my serial \texttt{C} program to perform Adaptive
+Mesh Refinement (AMR)\footnote{See lab 1 or project descriptions for details
+about AMR computation.} using \texttt{MPI} and \texttt{OpenMP}. In particular,
+the program launches 5 MPI ranks, 4 of which execute computations in parallel,
+which utilizes the inter-node parallelism available in a large cluster. Within
+each of the 4 computational ranks, I used \texttt{OpenMP} to exploit intra-node
+parallelism.
+
+TODO
+
+\section*{Tests}
+\label{sec:tests}
+
+\subsection*{Environment}
+\label{subsec:environment}
+
+The program was developed and tested on the
+\href{https://www.osc.edu/resources/technical_support/supercomputers/pitzer}{Pitzer
+cluster} at the \href{https://www.osc.edu/}{Ohio Supercomputer Center}. Note that
+the original assigment specified that we should use the
+\href{https://www.osc.edu/resources/technical_support/supercomputers/owens}{Owens
+cluster}, however, my first 3 labs were developed and tested on Pitzer, and after
+bringing this up with Dr. Jones, he permitted me to perform this lab on Pitzer as
+well, for comparison's sake.
+
+For development and testing, I loaded the \texttt{mvapich2/2.3} and \texttt{intel/18.0.3} modules, which
+allowed the program to be compiled with the \texttt{mpicc} compiler, using version 18.0.3 of the \texttt{icc}
+compiler a the default \texttt{C} compiler, as well as setting some environment variables pointing to
+\texttt{MPI}-related headers and libraries.
+
+For testing, I loaded the \texttt{python/3.6-conda5.2} module, which loads a
+python environment with the \texttt{NumPy}, \texttt{SciPy}, and
+\texttt{Matplotlib} packages, amoung others. \texttt{Python} is only necessary
+for collecting and plotting the data from testing, not for the actual exectuion
+of the program.
+
+\subsection*{Timing}
+\label{subsec:timing}
+
+I collected timing data using the same 4 methods as the first several labs:
+\texttt{time}, \texttt{clock}, and \texttt{clock\textunderscore gettime} from
+the \texttt{"time.h"} header, and the \texttt{UNIX} utility \texttt{time}.
+
+As with the second and third labs, I didn't use the results from the \texttt{clock}
+function from the \texttt{"time.h"} header, since it reports CPU time, not wall
+time. In this case, that would have been fine, since the rank 0 \texttt{MPI} process
+doesn't spawn any other threads, but to be consistent with previous labs,
+\emph{I used the \texttt{clock\textunderscore gettime}
+function for all results in this report}.
+
+\subsection*{Test Files}
+\label{subsec:test_files}
+
+Dr. Jones provided the \texttt{testgrid\textunderscore 400\textunderscore
+12206} test file.  As part of lab 1, I reduced the $\alpha$ (affect rate) and
+$\varepsilon$ parameters until the serial runtime increased into the 3 to 6
+minute range. In particular, I selected $\alpha = 0.01$ and $\varepsilon =
+0.02$, for which the serial program completed in 261 seconds.
+
+The above approach of changing the $\alpha$ and $\epsilon$ parameters allows us
+to make the programs run longer, but doesn't affect the actual length of each
+iteration. With only 12206 boxes, each iteration is fairly short (on the order
+of $\frac{261\textrm{ sec}}{1589637} = 0.16\textrm{ms}$ per iteration), so I
+expected the overhead of synchronizing threads would inhibit parallelizing
+beyond a small number of threads. In order to investigate this, I generated
+another test file, \texttt{testgrid\textunderscore 1000\textunderscore 296793},
+which has more boxes and therefore longer iterations. I used values of
+$(\alpha=0.9, \varepsilon=0.9)$ for this test case, since they produced a
+serial runtime of around 3 minutes.
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+        \hline
+        test & \texttt{\#} rows & \texttt{\#} cols & \texttt{\#} boxes & mean \texttt{\#} neighbors & std. dev. \texttt{\#} neighbors \\
+        \hline
+        \hline
+        \texttt{testgrid\textunderscore 400\textunderscore 12206} & 400 & 400 & 12206 & 5.89 & 1.55 \\
+        \texttt{testgrid\textunderscore 1000\textunderscore 296793} & 1000 & 1000 & 296793 & 4.79 & 1.57 \\
+        \hline
+    \end{tabular}
+    
+    \caption{Basic statistics for the test files.}
+
+\end{table}
+
+\section*{Results}
+\label{sec:results}
+
+The output for both test cases was as follows:
+\begin{itemize}
+    \item \texttt{testgrid\textunderscore 400\textunderscore 12206}: 1589637 iterations, $(max, min) = (0.085900, 0.084182)$
+    \item \texttt{testgrid\textunderscore 1000\textunderscore 296793}: 51684 iterations, $(max, min) = (0.000000, 0.000000)$
+\end{itemize}
+
+TODO
+
+results (graph)
+
+results comparison (table)
+
+things learned
+
+\section*{Project Usage}
+\label{sec:project}
+
+\subsection*{Building}
+\label{subsec:building}
+
+To build the \texttt{lab5_mpi} executable, navigate
+to the top level of the submitted directory and build as follows:
+
+\begin{lstlisting}[style=DOS]
+# Ensure that you have mpicc and icc compilers
+
+$ make
+$ ls
+... lab5_mpi ...
+\end{lstlisting}
+
+\subsection*{Running}
+\label{subsec:running}
+
+The syntax to run the program using the \texttt{mpirun} command on the OSC clusters is:
+
+\begin{lstlisting}[style=DOS]
+$ mpirun -genv OMP_NUM_THREADS <num-threads> \
+  -genv KMP_AFFINITY scatter \
+  -ppn 1 -n <num-nodes> \
+  ./lab5_mpi [affect-rate] [epsilon] [test-file]
+\end{lstlisting}
+where \texttt{num-threads} is the number of threads for \texttt{OpenMP} to spawn on each node
+and \texttt{num-nodes} is the number of nodes to use\footnote{all tests in this lab
+where done with \texttt{num-nodes} $= 5$}. Note that, unlike previous labs, \texttt{test-file}
+is passed an argument, not simply re-directed to \texttt{stdin}.
+
+\end{document}

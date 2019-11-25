@@ -43,7 +43,7 @@ typedef struct AMRInput {
  *
  * @return the allocated/populated {@code AMRInput} struct
  */
-AMRInput* parseInput();
+AMRInput* parseInput(char* file_name);
 
 /**
  * Destroys input created with {@code parseInput()}.
