@@ -40,7 +40,7 @@ mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 2 ./lab5_mp
 
 113.153867
 
-mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 2 ./lab5_mpi .01 .02 tests/testgrid_400_12206
+mpirun -genv OMP_NUM_THREADS 40 -genv KMP_AFFINITY scatter -ppn 1 -n 2 ./lab5_mpi .01 .02 tests/testgrid_400_12206
 
 116.704880
 
@@ -69,7 +69,7 @@ mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mp
 
 77.657008
 
-mpirun -genv OMP_NUM_THREADS 30 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .9 .9 tests/testgrid_1000_296793
+mpirun -genv OMP_NUM_THREADS 40 -genv KMP_AFFINITY scatter -ppn 1 -n 5 ./lab5_mpi .9 .9 tests/testgrid_1000_296793
 
 78.641712
 
